@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zahnzentrum-messerschmidt.de/sitemap.xml
