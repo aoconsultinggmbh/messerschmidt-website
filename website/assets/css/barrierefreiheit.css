@@ -54,7 +54,10 @@ html.bf-links .bf-knopf{right:auto;left:22px}
 }
 html.bf-links .bf-panel{right:auto;left:0;transform:translateX(-100%);
   box-shadow:14px 0 44px -18px rgba(19,32,56,.5)}
-.bf-panel[data-offen="true"]{transform:translateX(0);visibility:visible;transition:transform .3s cubic-bezier(.4,0,.2,1),visibility 0s}
+.bf-panel[data-offen="true"],
+html.bf-links .bf-panel[data-offen="true"]{transform:translateX(0);visibility:visible;transition:transform .3s cubic-bezier(.4,0,.2,1),visibility 0s}
+/* Die zweite Zeile ist nötig: „html.bf-links .bf-panel“ ist spezifischer und hielt das Panel auf der
+   linken Seite sonst dauerhaft aus dem Bild geschoben (Fenster ließ sich links nicht öffnen). */
 
 .bf-kopf{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -68,7 +71,7 @@ html.bf-links .bf-panel{right:auto;left:0;transform:translateX(-100%);
 .bf-zu:hover{background:rgba(255,255,255,.26)}
 .bf-zu svg{width:17px;height:17px}
 
-.bf-koerper{padding:20px;overflow-y:auto;flex:1 1 auto;-webkit-overflow-scrolling:touch}
+.bf-koerper{padding:20px;overflow-y:auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 
 .bf-gruppe{margin-bottom:26px}
 .bf-gruppe > h3{
@@ -139,15 +142,20 @@ html.bf-kontrast img:not(.bf-panel *),
 html.bf-kontrast picture:not(.bf-panel *){filter:contrast(1.2)}
 html.bf-kontrast .btn:not(.bf-panel *){outline:2px solid #fff}
 
-/* Invertiert */
-html.bf-invertiert body{filter:invert(1) hue-rotate(180deg)}
+/* Invertiert
+   Der Filter sitzt auf <html>, nicht auf <body>: Ein Filter auf body macht body zum Bezugsrahmen
+   für alle festen Elemente (Kopf, Panel, Knopf). Dann scrollen sie mit weg und man scrollt „ins Leere“.
+   Für das Wurzelelement gilt diese Regel nicht. Bilder und das Panel werden zurückgedreht. */
+html.bf-invertiert{filter:invert(1) hue-rotate(180deg)}
 html.bf-invertiert body img,
 html.bf-invertiert body video,
-html.bf-invertiert body iframe{filter:invert(1) hue-rotate(180deg)}
+html.bf-invertiert body iframe,
+html.bf-invertiert .bf-panel,
+html.bf-invertiert .bf-knopf{filter:invert(1) hue-rotate(180deg)}
 
 /* Graustufen */
-html.bf-graustufen body{filter:grayscale(1)}
-html.bf-graustufen .bf-panel,html.bf-graustufen .bf-knopf{filter:grayscale(0)}
+/* Auch hier auf <html> (siehe oben). Das Panel ist dann ebenfalls grau, es ist ohnehin fast nur Dunkelblau und Weiß. */
+html.bf-graustufen{filter:grayscale(1)}
 
 /* Links hervorheben */
 html.bf-links-hervor body a:not(.bf-panel *):not(.bf-knopf){

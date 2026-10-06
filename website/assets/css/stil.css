@@ -504,3 +504,6 @@ html.bf-ruhe .laufband-spur{animation:none}
 html.bf-schrift-aktiv main,html.bf-schrift-aktiv .fuss,html.bf-schrift-aktiv .kopf{zoom:var(--bf-schrift)}
 @media (max-width:760px){.bf-knopf{bottom:calc(84px + env(safe-area-inset-bottom))!important;right:14px!important}html.bf-links .bf-knopf{left:14px!important}}
 button.knopf{font-family:inherit;border:0;cursor:pointer}
+
+/* Zähler in der Fakten-Leiste: Zahl so groß und weiß wie der Rest der Zeile */
+.fakten-raster strong span{font-size:inherit;color:inherit}
