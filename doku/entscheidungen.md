@@ -82,3 +82,15 @@ wenn im Betriebssystem „Bewegung reduzieren“ an ist.
   Kundin bitte Artikel freigeben lassen.
 - Barrierefreiheit: Erklärungsseite, Knöpfe „Schrift größer“ und „Bewegung aus“ (Einstellung lokal im Browser, im Datenschutz erwähnt),
   sichtbare Tastatur-Markierung.
+
+## Runde 5 (06.10.2026)
+
+- Leitsatz auf der Startseite mit Hintergrundbild (Foto 19, Hände im Team, `start-haende`), Text weiß auf dunklem Verlauf.
+- Zweites Laufband unter dem Praxis-Bild, andere Reihenfolge, läuft in Gegenrichtung.
+- Bewertungen mit Luftbild Laubenheim (Foto 11, `start-luftbild`) statt Google-Maps-Einbettung: lädt schnell, braucht keine Einwilligung,
+  eine Karte hinter der Karte wäre unruhig und würde beim Scrollen Mausrad und Finger abfangen.
+- Google Maps auf der Kontaktseite unter „Anfahrt“, erst nach Einwilligung (Kategorie „karten“).
+- AO-Standard eingebunden: Einwilligungsbanner (`assets/js/einwilligung.js` + `ao-konfiguration.js`, Stand Kiefer) und
+  Barrierefreiheits-Widget (`assets/js/barrierefreiheit.js`, Stand ao-karriere). Pro Kunde nur `ao-konfiguration.js` anpassen.
+  Eigene Knöpfe „Schrift größer / Bewegung aus“ entfernt. Am Handy sitzt der Widget-Knopf über der Schnellleiste.
+- Achtung Namenskonflikt: Das Banner nutzt `data-offen`. Die Öffnungsanzeige heißt deshalb `data-sprechzeit`.

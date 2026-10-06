@@ -129,6 +129,8 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", sche
 <link rel="icon" href="{praefix}assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{praefix}assets/img/apple-touch-icon.png">
 <link rel="preload" href="{praefix}assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{praefix}assets/css/einwilligung.css?v={version("assets/css/einwilligung.css")}">
+<link rel="stylesheet" href="{praefix}assets/css/barrierefreiheit.css?v={version("assets/css/barrierefreiheit.css")}">
 <link rel="stylesheet" href="{praefix}assets/css/stil.css?v={version("assets/css/stil.css")}">
 {jsonld(PRAXIS_SCHEMA)}
 {"".join(jsonld(x) for x in (schema or []))}
@@ -145,7 +147,7 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", sche
       {navi}
       <a href="{KARRIERE}" rel="noopener">Karriere</a>
     </nav>
-    <span class="offen-anzeige kopf-offen" data-offen aria-live="polite"></span>
+    <span class="offen-anzeige kopf-offen" data-sprechzeit aria-live="polite"></span>
     <a class="knopf knopf-klein kopf-knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")}<span>{TEL}</span></a>
     <button class="navi-schalter" aria-expanded="false" aria-controls="navi" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
   </div>
@@ -170,7 +172,7 @@ def fuss(praefix=""):
     </div>
     <div>
       <p class="fuss-titel">Sprechzeiten</p>
-      <p><span class="offen-anzeige" data-offen></span></p>
+      <p><span class="offen-anzeige" data-sprechzeit></span></p>
       <p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr</p>
       <p>Freitag<br>8:00 bis 16:00 Uhr</p>
       <p class="fuss-notdienst">Zahnärztlicher Notdienst<br><a href="tel:+4961316246999">06131 6246-999</a></p>
@@ -191,13 +193,8 @@ def fuss(praefix=""):
       </ul>
     </div>
   </div>
-  <div class="wrap fuss-hilfen" aria-label="Darstellung anpassen">
-    <span>Darstellung:</span>
-    <button type="button" class="hilfe-knopf" data-hilfe="gross-schrift" aria-pressed="false">Schrift größer</button>
-    <button type="button" class="hilfe-knopf" data-hilfe="ruhig" aria-pressed="false">Bewegung aus</button>
-  </div>
   <div class="wrap fuss-unten">
-    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a> · <a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a> · <a href="{KARRIERE}" rel="noopener">Karriere</a></p>
+    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a><span data-einwilligung-huelle> · <button type="button" class="ein-ausloeser" data-einwilligung-oeffnen>Cookie-Einstellungen</button></span> · <a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a> · <a href="{KARRIERE}" rel="noopener">Karriere</a></p>
     <p><a href="https://www.instagram.com/zahnzentrum_messerschmidt/" rel="noopener" target="_blank">Instagram</a> · <a href="https://www.facebook.com/zahnzentrummesserschmidt/" rel="noopener" target="_blank">Facebook</a> · made by <a href="https://ao-consult.de" rel="noopener">AO Consulting</a></p>
   </div>
 </footer>
@@ -206,6 +203,9 @@ def fuss(praefix=""):
   <a href="{ROUTE}" rel="noopener" target="_blank">{icon("ort","ikon-klein")}<span>Route</span></a>
   <a href="{praefix}{TERMIN}">{icon("uhr","ikon-klein")}<span>Termin</span></a>
 </nav>
+<script src="{praefix}assets/js/ao-konfiguration.js?v={version("assets/js/ao-konfiguration.js")}" defer></script>
+<script src="{praefix}assets/js/einwilligung.js?v={version("assets/js/einwilligung.js")}" defer></script>
+<script src="{praefix}assets/js/barrierefreiheit.js?v={version("assets/js/barrierefreiheit.js")}" defer></script>
 <script src="{praefix}assets/js/app.js?v={version("assets/js/app.js")}" defer></script>
 <script src="{praefix}assets/js/statistik.js" defer></script>
 </body>
@@ -323,7 +323,8 @@ def startseite():
   <figure class="bild-hoch">{bild("start-sabine", "Dr. Sabine Messerschmidt, Zahnärztin und Praxisinhaberin", 900, 1125)}<figcaption>Dr. med. Sabine Messerschmidt<span>Zahnärztin, Praxisinhaberin</span></figcaption></figure>
 </section>
 
-<section class="aussage" aria-label="Unser Leitsatz">
+<section class="aussage aussage-bild" aria-label="Unser Leitsatz">
+  <div class="aussage-hg" data-parallax>{bild("start-haende", "", 1920, 1280)}</div>
   <div class="wrap"><p class="aussage-text" data-woerter>Bei uns steckt die Kompetenz im Detail. Kleine Teile ergeben das große Ganze: moderne Technik, erfahrene Zahnärztinnen und ein Team, das Sie mit einem Lächeln empfängt.</p></div>
 </section>
 
@@ -353,6 +354,8 @@ def startseite():
   </div>
 </section>
 
+<div class="laufband laufband-rueck" aria-hidden="true"><div class="laufband-spur"><span>Eigenes Dentallabor</span><i aria-hidden="true">✦</i><span>Kinderzahnheilkunde</span><i aria-hidden="true">✦</i><span>Implantologie</span><i aria-hidden="true">✦</i><span>Prophylaxe</span><i aria-hidden="true">✦</i><span>Oralchirurgie</span><i aria-hidden="true">✦</i><span>Ästhetik</span><i aria-hidden="true">✦</i><span>Parodontologie</span><i aria-hidden="true">✦</i><span>Funktionsdiagnostik</span><i aria-hidden="true">✦</i><span>Endodontie</span><i aria-hidden="true">✦</i><span>Eigenes Dentallabor</span><i aria-hidden="true">✦</i><span>Kinderzahnheilkunde</span><i aria-hidden="true">✦</i><span>Implantologie</span><i aria-hidden="true">✦</i><span>Prophylaxe</span><i aria-hidden="true">✦</i><span>Oralchirurgie</span><i aria-hidden="true">✦</i><span>Ästhetik</span><i aria-hidden="true">✦</i><span>Parodontologie</span><i aria-hidden="true">✦</i><span>Funktionsdiagnostik</span><i aria-hidden="true">✦</i><span>Endodontie</span><i aria-hidden="true">✦</i></div></div>
+
 <section class="wrap abschnitt zwei umgekehrt">
   <div class="text-spalte">
     <p class="dachzeile">Angst vor dem Zahnarzt?</p>
@@ -375,10 +378,11 @@ def startseite():
   </div>
 </section>
 
-<section class="abschnitt bewertungen">
+<section class="abschnitt bewertungen bewertungen-bild">
+  <div class="bewertungen-hg" data-parallax>{bild("start-luftbild", "", 1920, 1080)}</div>
   <div class="wrap bewertungen-zeile">
     <div>
-      <p class="dachzeile">Bewertungen</p>
+      <p class="dachzeile dachzeile-hell">Bewertungen</p>
       <h2>Was unsere Patienten sagen.</h2>
       <p>Lesen Sie, wie andere Patienten ihren Besuch im Zahnzentrum erlebt haben. Und wenn Sie zufrieden waren: Ihre Bewertung hilft anderen Menschen bei der Suche nach einer Zahnarztpraxis.</p>
     </div>
@@ -412,7 +416,7 @@ def startseite():
 <section class="wrap abschnitt kontakt-kurz">
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("ort")}<h3>Anfahrt</h3><p>{ADRESSE[0]}<br>{ADRESSE[1]}<br>Einfahrt über die Hans-Zöller-Straße 114, Parkplätze direkt am Haus.</p><a class="mehr" href="kontakt.html#anfahrt">Anfahrt ansehen {icon("pfeil","ikon-pfeil")}</a></div>
-    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-offen></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend<br>Freitag 8:00 bis 16:00 Uhr</p><a class="mehr" href="{TERMIN}">Termin anfragen {icon("pfeil","ikon-pfeil")}</a></div>
+    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-sprechzeit></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend<br>Freitag 8:00 bis 16:00 Uhr</p><a class="mehr" href="{TERMIN}">Termin anfragen {icon("pfeil","ikon-pfeil")}</a></div>
     <div class="kachel">{icon("telefon")}<h3>Kontakt</h3><p><a href="{TEL_LINK}">{TEL}</a><br><a href="mailto:{MAIL}">{MAIL}</a></p><p class="klein">Notdienst außerhalb der Sprechzeiten:<br><a href="tel:+4961316246999">06131 6246-999</a></p><a class="mehr" href="kontakt.html#anfrage">Anfrage senden {icon("pfeil","ikon-pfeil")}</a></div>
   </div>
 </section>
@@ -683,7 +687,7 @@ def kontakt():
   <h2 class="sr-only">Kontaktdaten und Sprechzeiten</h2>
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("telefon")}<h3>Telefon und E-Mail</h3><p><a class="gross-link" href="{TEL_LINK}">{TEL}</a><br>Fax 06131 86936<br><a href="mailto:{MAIL}">{MAIL}</a></p></div>
-    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-offen></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
+    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-sprechzeit></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
     <div class="kachel kachel-akzent">{icon("herz")}<h3>Zahnärztlicher Notdienst</h3><p>Außerhalb unserer Sprechzeiten wenden Sie sich bitte an den zahnärztlichen Notdienst:</p><p><a class="gross-link" href="tel:+4961316246999">06131 6246-999</a></p></div>
   </div>
 </section>
@@ -732,6 +736,15 @@ def kontakt():
     </div>
     <figure class="bild-quer">{bild("start-kontakt", "Eingang des Zahnzentrums Messerschmidt", 1600, 1067)}</figure>
   </div>
+  <div class="wrap">
+    <div class="karte-box" data-karte="Zahnzentrum Messerschmidt, Parkstraße 33, 55130 Mainz">
+      <div class="karte-hinweis">
+        {icon("ort","ikon-gross")}
+        <p><strong>Karte von Google Maps</strong><br>Mit dem Laden der Karte wird Ihre IP-Adresse an Google übertragen. Mehr dazu in der <a href="datenschutz.html#karten">Datenschutzerklärung</a>.</p>
+        <button type="button" class="knopf" data-karte-laden>Karte laden</button>
+      </div>
+    </div>
+  </div>
 </section>'''
     s += fuss()
     schreibe("kontakt.html", s)
@@ -761,10 +774,10 @@ def rechtliches():
     s += fuss()
     schreibe("impressum.html", s)
 
-    s = kopf("Datenschutz | Zahnzentrum Messerschmidt", "Datenschutzerklärung des Zahnzentrums Messerschmidt: Hosting, Kontakt, Besucherstatistik ohne Cookies, Ihre Rechte.", "datenschutz.html")
+    s = kopf("Datenschutz | Zahnzentrum Messerschmidt", "Datenschutzerklärung des Zahnzentrums Messerschmidt: Hosting, Kontaktformular, Statistik ohne Cookies, Google Maps nach Einwilligung und Ihre Rechte.", "datenschutz.html")
     s += f'''
 <!-- Zur Prüfung durch die Kundin. Verantwortliche, Datenschutzbeauftragte und Rechte von der bisherigen Erklärung übernommen;
-     Google Analytics, Google Maps, Cookies und Privacy Shield gibt es auf dieser Seite nicht mehr. -->
+     Google Analytics und Privacy Shield gibt es nicht mehr; Google Maps nur nach Einwilligung (AO-Einwilligungsbanner). -->
 <section class="wrap abschnitt rechtstext">
 <h1>Datenschutzerklärung</h1>
 <p>Der Schutz Ihrer persönlichen Daten ist uns wichtig. Hier informieren wir Sie über Zweck, Art und Rechtsgrundlagen der Datenverarbeitung auf dieser Webseite.</p>
@@ -776,7 +789,7 @@ def rechtliches():
 <p>Diese Webseite wird bei ALL-INKL.COM, Neue Medien Münnich, Inhaber René Münnich, Hauptstraße 68, 02742 Friedersdorf, gehostet. Beim Aufruf verarbeitet der Hoster technisch notwendige Daten (IP-Adresse, Zeitpunkt, aufgerufene Seite, Browser, Betriebssystem, zuvor besuchte Seite) in Server-Protokollen, die nach kurzer Zeit gelöscht werden. Rechtsgrundlage ist unser berechtigtes Interesse an einem sicheren und stabilen Betrieb (Art. 6 Abs. 1 lit. f DSGVO). Mit dem Hoster besteht ein Vertrag zur Auftragsverarbeitung.</p>
 <h2>SSL-/TLS-Verschlüsselung</h2>
 <p>Diese Seite nutzt eine SSL-/TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie am „https://“ in der Adresszeile.</p>
-<h2>Kontakt per Telefon, E-Mail oder WhatsApp</h2>
+<h2>Kontakt per Telefon oder E-Mail</h2>
 <p>Wenn Sie uns kontaktieren, verarbeiten wir Ihre Angaben zur Bearbeitung Ihres Anliegens (Art. 6 Abs. 1 lit. b DSGVO bei Terminen und Behandlungen, sonst Art. 6 Abs. 1 lit. f DSGVO). Bitte senden Sie uns per E-Mail keine ausführlichen Gesundheitsangaben, sondern besprechen Sie diese am Telefon oder in der Praxis. E-Mails können auf dem Übertragungsweg unbefugt mitgelesen werden.</p>
 <h2>Kontaktformular</h2>
 <p>Wenn Sie uns über das Kontaktformular schreiben, verarbeiten wir Ihre Angaben (Name, Telefon, E-Mail, Anliegen, Wunschzeit und Nachricht), um Ihre Anfrage zu beantworten. Die Angaben werden per E-Mail an unsere Praxis übermittelt und nicht auf dem Webserver gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei Terminanfragen, im Übrigen unser berechtigtes Interesse an der Beantwortung (Art. 6 Abs. 1 lit. f DSGVO). Bitte machen Sie im Formular keine ausführlichen Angaben zu Ihrer Gesundheit. Wir löschen die Anfrage, sobald sie erledigt ist und keine Aufbewahrungspflicht besteht.</p>
@@ -784,10 +797,14 @@ def rechtliches():
 <p>Das Video auf der Startseite liegt auf unserem eigenen Server. Es wird nichts von YouTube, Vimeo oder anderen Anbietern geladen.</p>
 <h2>Besucherstatistik (Matomo)</h2>
 <p>Wir nutzen die Statistik-Software Matomo, betrieben auf einem Server der AO Consulting GmbH, Zeiloch 13, 76646 Bruchsal, in Deutschland. Matomo arbeitet hier ohne Cookies und ohne Speicherung auf Ihrem Gerät; Ihre IP-Adresse wird vor der Verarbeitung um zwei Bytes gekürzt. Erfasst werden Mengen und Muster, keine Personen. Rechtsgrundlage ist unser berechtigtes Interesse an der Verbesserung der Seite (Art. 6 Abs. 1 lit. f DSGVO); da nichts auf Ihrem Gerät gespeichert wird, ist keine Einwilligung nach § 25 TDDDG nötig. Sie können widersprechen, indem Sie in Ihrem Browser „Do Not Track“ aktivieren. Die Daten werden nach 13 Monaten gelöscht.</p>
-<h2>Einstellungen zur Darstellung</h2>
-<p>Wenn Sie unten auf der Seite „Schrift größer“ oder „Bewegung aus“ wählen, speichert Ihr Browser diese Einstellung lokal auf Ihrem Gerät, damit sie beim nächsten Seitenaufruf erhalten bleibt. Diese Angabe wird nicht an uns übertragen und kann jederzeit durch erneutes Klicken oder Löschen der Browserdaten entfernt werden. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG, da die Speicherung für die von Ihnen ausdrücklich gewünschte Funktion erforderlich ist.</p>
-<h2>Keine Cookies, keine eingebetteten Inhalte</h2>
-<p>Diese Webseite setzt keine Cookies. Es werden keine Schriften, Karten oder Skripte von Drittanbietern geladen. Links zu Instagram, Facebook, WhatsApp, Google Maps (Routenplanung) oder zu unserer Karriereseite führen auf andere Seiten; erst beim Klick gelten deren Datenschutzbestimmungen.</p>
+<h2>Einstellungen zur Barrierefreiheit</h2>
+<p>Wenn Sie über das Symbol unten rechts Einstellungen zur Barrierefreiheit wählen (zum Beispiel größere Schrift oder hoher Kontrast), speichert Ihr Browser diese Einstellungen lokal auf Ihrem Gerät (Speichereintrag „ao-barrierefreiheit-v1“, kein Cookie), damit sie beim nächsten Seitenaufruf erhalten bleiben. Die Angabe wird nicht an uns übertragen und lässt sich im selben Fenster zurücksetzen oder durch Löschen der Browserdaten entfernen. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG, da die Speicherung für die von Ihnen ausdrücklich gewünschte Funktion erforderlich ist.</p>
+<h2>Einwilligung und Cookies</h2>
+<p>Diese Webseite setzt keine Cookies. Ihre Entscheidung im Fenster zur Einwilligung („Cookie-Einstellungen“) speichern wir lokal in Ihrem Browser (Speichereintrag „ao-einwilligung-v1“, kein Cookie) für 12 Monate, damit Sie nicht bei jedem Aufruf erneut gefragt werden. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG sowie Art. 6 Abs. 1 lit. c DSGVO (Nachweis der Einwilligung). Ihre Einwilligung können Sie jederzeit über „Cookie-Einstellungen“ unten auf jeder Seite widerrufen oder ändern.</p>
+<h2 id="karten">Google Maps (nur nach Einwilligung)</h2>
+<p>Auf der Kontaktseite können Sie eine Karte von Google Maps laden. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Die Karte wird erst geladen, wenn Sie im Einwilligungsfenster „Karten“ zustimmen oder auf „Karte laden“ klicken. Dann werden Ihre IP-Adresse und technische Angaben zu Ihrem Browser an Google übertragen, eine Verarbeitung in den USA ist möglich; Google beruft sich dafür auf das EU-US Data Privacy Framework. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG), die Sie jederzeit mit Wirkung für die Zukunft widerrufen können. Weitere Informationen: <a href="https://policies.google.com/privacy" rel="noopener">policies.google.com/privacy</a>.</p>
+<h2>Keine weiteren Inhalte von Drittanbietern</h2>
+<p>Abgesehen von der Karte nach Einwilligung werden keine Schriften, Karten oder Skripte von Drittanbietern geladen. Links zu Instagram, Facebook, Google (Bewertungen, Routenplanung) oder zu unserer Karriereseite führen auf andere Seiten; erst beim Klick gelten deren Datenschutzbestimmungen.</p>
 <h2>Weitergabe an Dritte</h2>
 <p>Wir geben Ihre Daten nur weiter, wenn Sie eingewilligt haben (Art. 6 Abs. 1 lit. a DSGVO), wenn es zur Geltendmachung oder Verteidigung von Rechtsansprüchen nötig ist (Art. 6 Abs. 1 lit. f DSGVO), wenn eine gesetzliche Pflicht besteht (Art. 6 Abs. 1 lit. c DSGVO) oder wenn es für ein Vertragsverhältnis mit Ihnen erforderlich ist (Art. 6 Abs. 1 lit. b DSGVO).</p>
 <h2>Ihre Rechte</h2>
@@ -897,7 +914,7 @@ def ratgeber():
 
 def barrierefreiheit():
     brot = [("Startseite", ""), ("Barrierefreiheit", "barrierefreiheit.html")]
-    s = kopf("Barrierefreiheit | Zahnzentrum Messerschmidt", "Erklärung zur Barrierefreiheit der Webseite des Zahnzentrums Messerschmidt: was wir umgesetzt haben, Darstellung anpassen und wie Sie uns Barrieren melden.",
+    s = kopf("Barrierefreiheit | Zahnzentrum Messerschmidt", "Barrierefreiheit beim Zahnzentrum Messerschmidt: was wir umgesetzt haben, wie Sie Schrift, Kontrast und Bewegung anpassen und Barrieren melden.",
              "barrierefreiheit.html", schema=[brotkrumen_schema(brot)])
     s += brotkrumen_html(brot)
     s += f'''
@@ -916,8 +933,17 @@ def barrierefreiheit():
   <li>Formularfelder sind beschriftet, Fehlermeldungen werden vorgelesen</li>
 </ul>
 <h2>Darstellung anpassen</h2>
-<p>Ganz unten auf jeder Seite können Sie die Schrift vergrößern und Bewegungseffekte ausschalten. Ihr Browser merkt sich diese Einstellung auf Ihrem Gerät. Daneben können Sie die Seite wie gewohnt mit Ihrem Browser vergrößern (Strg und Plus, am Mac Cmd und Plus).</p>
-<div class="fuss-hilfen fuss-hilfen-seite"><button type="button" class="hilfe-knopf" data-hilfe="gross-schrift" aria-pressed="false">Schrift größer</button><button type="button" class="hilfe-knopf" data-hilfe="ruhig" aria-pressed="false">Bewegung aus</button></div>
+<p>Über das Symbol mit der Figur unten rechts auf jeder Seite öffnen Sie die Einstellungen zur Barrierefreiheit. Dort können Sie unter anderem:</p>
+<ul class="haken-liste">
+  <li>die Schrift vergrößern sowie Zeilen- und Buchstabenabstand erhöhen</li>
+  <li>einen hohen Kontrast, invertierte Farben oder Graustufen einschalten</li>
+  <li>Links und Überschriften hervorheben</li>
+  <li>eine besser lesbare Schrift bei Lese- und Rechtschreibschwäche wählen</li>
+  <li>einen großen Mauszeiger, eine Leselinie oder eine Lesemaske nutzen</li>
+  <li>Animationen und das Video anhalten</li>
+</ul>
+<p>Ihr Browser merkt sich diese Einstellungen auf Ihrem Gerät. Daneben können Sie die Seite wie gewohnt mit Ihrem Browser vergrößern (Strg und Plus, am Mac Cmd und Plus).</p>
+<p><button type="button" class="knopf" data-bf-oeffnen>Einstellungen öffnen</button></p>
 <h2>Bekannte Einschränkungen</h2>
 <p>Die herunterladbaren Patientenbögen (PDF) sind noch nicht vollständig barrierefrei. Gerne helfen wir Ihnen beim Ausfüllen in der Praxis.</p>
 <h2>Barriere melden</h2>

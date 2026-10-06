@@ -73,7 +73,7 @@
 
   // Parallax für große Bilder
   var parallax = ruhe ? [] : d.querySelectorAll('[data-parallax]');
-  var istRuhig = function () { return ruhe || d.documentElement.classList.contains('ruhig'); };
+  var istRuhig = function () { return ruhe || d.documentElement.classList.contains('bf-ruhe'); };
 
   // Kopf: beim Runterscrollen ausblenden, beim Hochscrollen zeigen
   var kopfEl = d.querySelector('.kopf'), letzteY = window.scrollY;
@@ -146,24 +146,39 @@
     });
   }
 
-  // Darstellung: Schrift größer / Bewegung aus (Einstellung bleibt lokal im Browser)
-  var speicher = { lies: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-                   schreib: function (k, v) { try { v ? localStorage.setItem(k, '1') : localStorage.removeItem(k); } catch (e) {} } };
-  function hilfeSetzen(name, an) {
-    d.documentElement.classList.toggle(name, an);
-    d.querySelectorAll('[data-hilfe="' + name + '"]').forEach(function (k) { k.setAttribute('aria-pressed', an ? 'true' : 'false'); });
-    if (name === 'ruhig' && video) { if (an) video.pause(); else if (!ruhe) video.play(); }
-  }
-  ['gross-schrift', 'ruhig'].forEach(function (n) { if (speicher.lies('zm-' + n)) hilfeSetzen(n, true); });
-  d.querySelectorAll('[data-hilfe]').forEach(function (k) {
-    k.addEventListener('click', function () {
-      var n = k.getAttribute('data-hilfe'), an = !d.documentElement.classList.contains(n);
-      hilfeSetzen(n, an); speicher.schreib('zm-' + n, an);
-    });
+  // Barrierefreiheits-Widget (AO-Standard): „Animationen anhalten“ hält auch Video und Laufbänder an
+  var wurzelEl = d.documentElement;
+  var bfRuhe = function () {
+    if (video && wurzelEl.classList.contains('bf-ruhe')) { video.pause(); if (vs) vs.setAttribute('aria-pressed', 'true'); }
+  };
+  if ('MutationObserver' in window) new MutationObserver(bfRuhe).observe(wurzelEl, { attributes: true, attributeFilter: ['class'] });
+  bfRuhe();
+  d.querySelectorAll('[data-bf-oeffnen]').forEach(function (k) {
+    k.addEventListener('click', function () { var bk = d.querySelector('.bf-knopf'); if (bk) bk.click(); });
   });
 
+  // Karte auf der Kontaktseite: erst nach Einwilligung (Kategorie „karten“), vorher keine Anfrage an Google
+  var karteBox = d.querySelector('.karte-box');
+  if (karteBox) {
+    var darfKarte = function () { return !!(window.aoEinwilligung && window.aoEinwilligung.erlaubt('karten')); };
+    var ladeKarte = function () {
+      if (karteBox.dataset.geladen === '1') return;
+      karteBox.dataset.geladen = '1';
+      var rahmen = d.createElement('iframe');
+      rahmen.src = 'https://www.google.com/maps?q=' + encodeURIComponent(karteBox.dataset.karte) + '&output=embed';
+      rahmen.title = 'Karte mit dem Standort des Zahnzentrums Messerschmidt in Mainz-Laubenheim';
+      rahmen.loading = 'lazy'; rahmen.referrerPolicy = 'no-referrer-when-downgrade'; rahmen.setAttribute('allowfullscreen', '');
+      karteBox.innerHTML = ''; karteBox.appendChild(rahmen);
+    };
+    var kk = karteBox.querySelector('[data-karte-laden]');
+    if (kk) kk.addEventListener('click', function () { if (window.aoEinwilligung) window.aoEinwilligung.setze('karten', true); ladeKarte(); });
+    var pruefeKarte = function () { if (darfKarte()) ladeKarte(); };
+    d.addEventListener('ao:einwilligung', pruefeKarte);
+    pruefeKarte();
+  }
+
   // „Jetzt geöffnet“: Sprechzeiten Mo bis Do 8 bis 20, Fr 8 bis 16 (Zeit in Mainz), Feiertage Rheinland-Pfalz geschlossen
-  var offenFelder = d.querySelectorAll('[data-offen]');
+  var offenFelder = d.querySelectorAll('[data-sprechzeit]');
   if (offenFelder.length) {
     var ZEITEN = { 1: [8, 20], 2: [8, 20], 3: [8, 20], 4: [8, 20], 5: [8, 16] };
     var FEIERTAGE = ['2026-01-01','2026-04-03','2026-04-06','2026-05-01','2026-05-14','2026-05-25','2026-06-04','2026-10-03','2026-11-01','2026-12-25','2026-12-26',

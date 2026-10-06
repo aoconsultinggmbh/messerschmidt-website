@@ -466,3 +466,41 @@ html.ruhig .hero h1 .zeile>span,html.ruhig .hero .dachzeile,html.ruhig .hero-unt
 /* Dachzeilen: immer Blau auf hell, Weiß auf dunkel (gilt vor allen Absatzfarben) */
 p.dachzeile:not(.dachzeile-hell){color:var(--blau) !important}
 p.dachzeile-hell{color:#fff !important}
+
+/* ---------- Runde 5: Leitsatz und Bewertungen mit Bild, zweites Laufband, Karte, AO-Widgets ---------- */
+:root{--navy:#0b1f33;--navy-deep:#0b1f33;--navy-ink:#0b1f33;--coral:#006eb7;--coral-dark:#00558e}
+
+.aussage-bild,.bewertungen-bild{position:relative;overflow:hidden;isolation:isolate}
+.aussage-hg,.bewertungen-hg{position:absolute;inset:-8% 0;z-index:-2}
+.aussage-hg picture,.aussage-hg img,.bewertungen-hg picture,.bewertungen-hg img{width:100%;height:100%;object-fit:cover}
+.aussage-bild::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,31,51,.92) 0%,rgba(11,31,51,.78) 55%,rgba(11,31,51,.55) 100%)}
+.aussage-bild .aussage-text span{color:rgba(255,255,255,.22)}
+.aussage-bild .aussage-text span.an{color:#fff}
+.aussage-bild .aussage-text span.an:nth-child(-n+6){color:var(--hellblau)}
+@media (prefers-reduced-motion:reduce){.aussage-bild .aussage-text span{color:#fff}}
+html.bf-ruhe .aussage-bild .aussage-text span{color:#fff}
+
+.bewertungen-bild{background:var(--nacht)}
+.bewertungen-bild::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,31,51,.9) 0%,rgba(11,31,51,.72) 50%,rgba(11,31,51,.35) 100%)}
+.bewertungen-bild h2{color:#fff}
+.bewertungen-bild .bewertungen-zeile > div:first-child p:not(.dachzeile){color:rgba(255,255,255,.85)}
+.bewertungen-bild .bewertungen-karte{box-shadow:0 30px 80px rgba(0,0,0,.35)}
+@media (max-width:900px){.bewertungen-bild::before{background:rgba(11,31,51,.8)}}
+
+.laufband-rueck{border-top:0}
+.laufband-rueck .laufband-spur{animation-direction:reverse}
+html.bf-ruhe .laufband-spur{animation:none}
+
+.karte-box{margin-top:clamp(40px,6vw,72px);border-radius:var(--radius);overflow:hidden;background:var(--flaeche);aspect-ratio:16/7;min-height:340px;display:grid;place-items:center;border:1px solid var(--linie)}
+.karte-box iframe{width:100%;height:100%;border:0;display:block}
+.karte-hinweis{max-width:520px;text-align:center;padding:28px}
+.karte-hinweis svg{width:40px;height:40px;color:var(--blau);margin:0 auto 12px}
+.karte-hinweis p{color:var(--grau);font-size:15px}
+@media (max-width:760px){.karte-box{aspect-ratio:auto;min-height:380px}}
+
+/* AO-Widgets an die Seite angepasst */
+.fuss .ein-ausloeser{color:#fff;font-size:inherit}
+.fuss .ein-ausloeser:hover{color:var(--hellblau)}
+html.bf-schrift-aktiv main,html.bf-schrift-aktiv .fuss,html.bf-schrift-aktiv .kopf{zoom:var(--bf-schrift)}
+@media (max-width:760px){.bf-knopf{bottom:calc(84px + env(safe-area-inset-bottom))!important;right:14px!important}html.bf-links .bf-knopf{left:14px!important}}
+button.knopf{font-family:inherit;border:0;cursor:pointer}
