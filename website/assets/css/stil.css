@@ -395,3 +395,74 @@ p{margin:0 0 1.1em}
 @media (max-width:950px){.leistung-seite .cta-karte{margin-bottom:28px}}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- Runde 4: Öffnungsanzeige, Schnellleiste, Bewertungen, Ratgeber, Downloads, Barrierefreiheit ---------- */
+:focus-visible{outline:3px solid var(--blau);outline-offset:3px;border-radius:4px}
+.offen-anzeige{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;white-space:nowrap}
+.offen-anzeige:empty{display:none}
+.offen-anzeige::before{content:"";width:9px;height:9px;border-radius:50%;background:#b8c2cc;flex:none}
+.offen-anzeige.ist-offen{color:#13744a}.offen-anzeige.ist-offen::before{background:#1fa463;box-shadow:0 0 0 4px rgba(31,164,99,.18)}
+.offen-anzeige.ist-zu{color:var(--grau)}
+.kopf-offen{margin-left:8px}
+.kopf-transparent .kopf-offen{color:#fff}.kopf-transparent .kopf-offen.ist-zu{color:rgba(255,255,255,.85)}
+@media (max-width:1300px){.kopf-offen{display:none}}
+.fuss .offen-anzeige.ist-offen{color:#7ee2b0}.fuss .offen-anzeige.ist-zu{color:rgba(255,255,255,.7)}
+.kachel-akzent .offen-anzeige.ist-zu{color:rgba(255,255,255,.8)}
+/* Schnellleiste nur am Handy */
+.schnellleiste{display:none}
+@media (max-width:760px){
+  .schnellleiste{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:90;background:rgba(11,31,51,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  .schnellleiste a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:10px}
+  .schnellleiste a:first-child{background:var(--blau)}
+  .schnellleiste .ikon-klein{width:22px;height:22px}
+  body{padding-bottom:76px}
+  .video-schalter{bottom:16px}
+}
+/* Fuß mit fünf Spalten */
+.fuss-raster{grid-template-columns:1.3fr 1fr 1fr 1fr 1fr}
+@media (max-width:1100px){.fuss-raster{grid-template-columns:1fr 1fr 1fr}}
+@media (max-width:700px){.fuss-raster{grid-template-columns:1fr 1fr}.fuss-marke{grid-column:1/-1}}
+.fuss-hilfen{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-bottom:18px;font-size:14px}
+.hilfe-knopf{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer}
+.hilfe-knopf[aria-pressed=true]{background:var(--hellblau);border-color:var(--hellblau);color:var(--nacht)}
+.fuss-hilfen-seite .hilfe-knopf{color:var(--nacht);border-color:rgba(11,31,51,.3)}
+.fuss-hilfen-seite .hilfe-knopf[aria-pressed=true]{color:var(--nacht)}
+html.gross-schrift{zoom:1.15}
+html.ruhig *{animation:none !important;transition:none !important;scroll-behavior:auto !important}
+html.ruhig .einblenden{opacity:1 !important;transform:none !important;clip-path:none !important}
+html.ruhig .einblenden img{transform:none !important}
+html.ruhig .aussage-text span{color:var(--nacht)}
+html.ruhig .hero h1 .zeile>span,html.ruhig .hero .dachzeile,html.ruhig .hero-unterzeile,html.ruhig .hero .knoepfe{opacity:1 !important;transform:none !important}
+/* Bewertungen */
+.bewertungen{background:var(--flaeche)}
+.bewertungen-zeile{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+@media (max-width:900px){.bewertungen-zeile{grid-template-columns:1fr}}
+.bewertungen-zeile p{color:var(--grau);font-size:18px}
+.bewertungen-karte{background:#fff;border-radius:var(--radius);padding:36px;box-shadow:0 24px 60px rgba(11,31,51,.08);text-align:center}
+.bewertungen-karte .sterne{font-size:34px;letter-spacing:6px;color:#f5b301;margin-bottom:10px}
+.bewertungen-karte p{font-size:16px;color:var(--grau)}
+.bewertungen-karte strong{color:var(--nacht);font-size:18px}
+.bewertungen-karte .knopf{margin:8px 0 14px}
+/* Ratgeber */
+.ratgeber-raster{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:1000px){.ratgeber-raster{grid-template-columns:1fr}}
+.ratgeber-karte{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid var(--linie);border-radius:var(--radius);padding:30px;text-decoration:none;color:var(--text);transition:transform .25s,box-shadow .25s}
+.ratgeber-karte:hover{transform:translateY(-4px);box-shadow:0 24px 50px rgba(11,31,51,.10)}
+.ratgeber-karte h3{margin:6px 0 4px}
+.ratgeber-karte p{color:var(--grau);font-size:16px;flex:1}
+/* Downloads */
+.downloads{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:10px}
+.downloads a{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--linie);border-radius:14px;padding:14px 18px;text-decoration:none;color:var(--nacht);transition:border-color .2s}
+.downloads a:hover{border-color:var(--blau)}
+.downloads .ikon-klein{width:26px;height:26px;color:var(--blau)}
+.downloads strong{display:block}.downloads small{color:var(--grau);font-size:14px}
+.kachel .downloads a{background:#fff}
+.ablauf-gross{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){.ablauf-gross{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.ablauf-gross{grid-template-columns:1fr}}
+.ablauf-gross li{padding:70px 24px 24px}
+.ablauf-gross li::before{top:24px;left:24px}
+
+/* Dachzeilen: immer Blau auf hell, Weiß auf dunkel (gilt vor allen Absatzfarben) */
+p.dachzeile:not(.dachzeile-hell){color:var(--blau) !important}
+p.dachzeile-hell{color:#fff !important}

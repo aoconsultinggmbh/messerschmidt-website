@@ -73,6 +73,7 @@
 
   // Parallax für große Bilder
   var parallax = ruhe ? [] : d.querySelectorAll('[data-parallax]');
+  var istRuhig = function () { return ruhe || d.documentElement.classList.contains('ruhig'); };
 
   // Kopf: beim Runterscrollen ausblenden, beim Hochscrollen zeigen
   var kopfEl = d.querySelector('.kopf'), letzteY = window.scrollY;
@@ -86,7 +87,7 @@
       var n = Math.round(anteil * woerter.length);
       woerter.forEach(function (w, i) { w.classList.toggle('an', i < n); });
     }
-    parallax.forEach(function (el) {
+    if (!istRuhig()) parallax.forEach(function (el) {
       var r = el.parentElement.getBoundingClientRect();
       if (r.bottom < 0 || r.top > h) return;
       var v = (r.top + r.height / 2 - h / 2) * -0.12;
@@ -143,5 +144,52 @@
           window.location.href = link.getAttribute('href') + '&body=' + encodeURIComponent(text);
         });
     });
+  }
+
+  // Darstellung: Schrift größer / Bewegung aus (Einstellung bleibt lokal im Browser)
+  var speicher = { lies: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                   schreib: function (k, v) { try { v ? localStorage.setItem(k, '1') : localStorage.removeItem(k); } catch (e) {} } };
+  function hilfeSetzen(name, an) {
+    d.documentElement.classList.toggle(name, an);
+    d.querySelectorAll('[data-hilfe="' + name + '"]').forEach(function (k) { k.setAttribute('aria-pressed', an ? 'true' : 'false'); });
+    if (name === 'ruhig' && video) { if (an) video.pause(); else if (!ruhe) video.play(); }
+  }
+  ['gross-schrift', 'ruhig'].forEach(function (n) { if (speicher.lies('zm-' + n)) hilfeSetzen(n, true); });
+  d.querySelectorAll('[data-hilfe]').forEach(function (k) {
+    k.addEventListener('click', function () {
+      var n = k.getAttribute('data-hilfe'), an = !d.documentElement.classList.contains(n);
+      hilfeSetzen(n, an); speicher.schreib('zm-' + n, an);
+    });
+  });
+
+  // „Jetzt geöffnet“: Sprechzeiten Mo bis Do 8 bis 20, Fr 8 bis 16 (Zeit in Mainz), Feiertage Rheinland-Pfalz geschlossen
+  var offenFelder = d.querySelectorAll('[data-offen]');
+  if (offenFelder.length) {
+    var ZEITEN = { 1: [8, 20], 2: [8, 20], 3: [8, 20], 4: [8, 20], 5: [8, 16] };
+    var FEIERTAGE = ['2026-01-01','2026-04-03','2026-04-06','2026-05-01','2026-05-14','2026-05-25','2026-06-04','2026-10-03','2026-11-01','2026-12-25','2026-12-26',
+                     '2027-01-01','2027-03-26','2027-03-29','2027-05-01','2027-05-06','2027-05-17','2027-05-27','2027-10-03','2027-11-01','2027-12-25','2027-12-26'];
+    var TAGE = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+    var jetztInMainz = function () {
+      var t = new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+      var g = {}; t.forEach(function (x) { g[x.type] = x.value; });
+      var datum = new Date(Date.UTC(+g.year, +g.month - 1, +g.day));
+      return { tag: datum.getUTCDay(), iso: g.year + '-' + g.month + '-' + g.day, stunde: (+g.hour % 24) + (+g.minute) / 60, datum: datum };
+    };
+    var aktualisieren = function () {
+      var j = jetztInMainz(), z = ZEITEN[j.tag], feiertag = FEIERTAGE.indexOf(j.iso) > -1, text, offen = false;
+      if (z && !feiertag && j.stunde >= z[0] && j.stunde < z[1]) { offen = true; text = 'Jetzt geöffnet · bis ' + z[1] + ' Uhr'; }
+      else {
+        for (var i = 0; i < 8; i++) {
+          var d2 = new Date(j.datum.getTime() + i * 864e5), iso = d2.toISOString().slice(0, 10), zz = ZEITEN[d2.getUTCDay()];
+          if (!zz || FEIERTAGE.indexOf(iso) > -1) continue;
+          if (i === 0 && j.stunde >= zz[0]) continue;
+          text = 'Geschlossen · öffnet ' + (i === 0 ? 'heute' : i === 1 ? 'morgen' : TAGE[d2.getUTCDay()]) + ' um ' + zz[0] + ' Uhr';
+          break;
+        }
+        if (feiertag) text = 'Heute Feiertag · ' + text.replace('Geschlossen · ', '');
+      }
+      offenFelder.forEach(function (f) { f.textContent = text; f.classList.toggle('ist-offen', offen); f.classList.toggle('ist-zu', !offen); });
+    };
+    aktualisieren(); setInterval(aktualisieren, 60000);
   }
 })();

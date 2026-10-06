@@ -11,6 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from inhalt_leistungen import LEISTUNGEN
+from inhalt_ratgeber import RATGEBER
 
 PROJEKT = Path(__file__).resolve().parent.parent
 WEB = PROJEKT / "website"
@@ -80,6 +81,7 @@ ICONS = {
  "labor": '<path d="M18 6h12M20 6v12L9 38c-1 3 1 5 4 5h22c3 0 5-2 4-5L28 18V6"/><path d="M14 30h20"/>',
  "blatt": '<path d="M10 38C10 18 24 8 40 8c0 16-10 30-30 30z"/><path d="M10 38L28 20"/>',
  "pfeil": '<path d="M10 24h28M28 14l10 10-10 10"/>',
+ "download": '<path d="M24 6v24M14 20l10 10 10-10"/><path d="M8 34v6h32v-6"/>',
 }
 def icon(n, cls="ikon"):
     return f'<svg class="{cls}" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[n]}</svg>'
@@ -91,7 +93,9 @@ def bild(name, alt, w, h, cls="", lazy=True, praefix=""):
             f'<img src="{praefix}assets/img/{name}.jpg" alt="{html.escape(alt)}" width="{w}" height="{h}"{l}></picture>')
 
 NAVI = [("leistungen.html", "Leistungen"), ("praxis.html", "Praxis"), ("team.html", "Team"),
-        ("patienteninfos.html", "Patienteninfos"), ("kontakt.html", "Kontakt")]
+        ("neu-bei-uns.html", "Neu bei uns"), ("ratgeber.html", "Ratgeber"), ("kontakt.html", "Kontakt")]
+GOOGLE_BEWERTUNGEN = "https://www.google.com/maps/search/?api=1&query=Zahnzentrum%20Messerschmidt%20Parkstra%C3%9Fe%2033%20Mainz"
+TERMIN = "kontakt.html#anfrage"
 
 def version(datei):
     """Kurzer Fingerabdruck der Datei, damit Browser nach jeder Änderung die neue CSS/JS laden."""
@@ -100,7 +104,7 @@ def version(datei):
 def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", schema=None, og_bild="og-bild.jpg", vorladen=None):
     canon = f"{DOMAIN}/{pfad}" if pfad else f"{DOMAIN}/"
     akt = ' aria-current="page"'
-    navi = "".join(f'<a href="{praefix}{h}"{akt if h == pfad else ""}>{t}</a>' for h, t in NAVI)
+    navi = "".join(f'<a href="{praefix}{h}"{akt if (h == pfad or pfad.startswith(h[:-5] + "/")) else ""}>{t}</a>' for h, t in NAVI)
     klasse = "kopf kopf-transparent" if hell_start else "kopf"
     return f'''<!doctype html>
 <html lang="de">
@@ -141,6 +145,7 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", sche
       {navi}
       <a href="{KARRIERE}" rel="noopener">Karriere</a>
     </nav>
+    <span class="offen-anzeige kopf-offen" data-offen aria-live="polite"></span>
     <a class="knopf knopf-klein kopf-knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")}<span>{TEL}</span></a>
     <button class="navi-schalter" aria-expanded="false" aria-controls="navi" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
   </div>
@@ -165,6 +170,7 @@ def fuss(praefix=""):
     </div>
     <div>
       <p class="fuss-titel">Sprechzeiten</p>
+      <p><span class="offen-anzeige" data-offen></span></p>
       <p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr</p>
       <p>Freitag<br>8:00 bis 16:00 Uhr</p>
       <p class="fuss-notdienst">Zahnärztlicher Notdienst<br><a href="tel:+4961316246999">06131 6246-999</a></p>
@@ -173,12 +179,33 @@ def fuss(praefix=""):
       <p class="fuss-titel">Leistungen</p>
       <ul class="fuss-liste">{leist}</ul>
     </div>
+    <div>
+      <p class="fuss-titel">Für Patienten</p>
+      <ul class="fuss-liste">
+        <li><a href="{praefix}neu-bei-uns.html">Neu bei uns</a></li>
+        <li><a href="{praefix}patienteninfos.html">Patienteninfos</a></li>
+        <li><a href="{praefix}ratgeber.html">Ratgeber</a></li>
+        <li><a href="{praefix}{TERMIN}">Termin anfragen</a></li>
+        <li><a href="{GOOGLE_BEWERTUNGEN}" rel="noopener" target="_blank">Bewertungen auf Google</a></li>
+        <li><a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap fuss-hilfen" aria-label="Darstellung anpassen">
+    <span>Darstellung:</span>
+    <button type="button" class="hilfe-knopf" data-hilfe="gross-schrift" aria-pressed="false">Schrift größer</button>
+    <button type="button" class="hilfe-knopf" data-hilfe="ruhig" aria-pressed="false">Bewegung aus</button>
   </div>
   <div class="wrap fuss-unten">
-    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a> · <a href="{KARRIERE}" rel="noopener">Karriere</a></p>
+    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a> · <a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a> · <a href="{KARRIERE}" rel="noopener">Karriere</a></p>
     <p><a href="https://www.instagram.com/zahnzentrum_messerschmidt/" rel="noopener" target="_blank">Instagram</a> · <a href="https://www.facebook.com/zahnzentrummesserschmidt/" rel="noopener" target="_blank">Facebook</a> · made by <a href="https://ao-consult.de" rel="noopener">AO Consulting</a></p>
   </div>
 </footer>
+<nav class="schnellleiste" aria-label="Schnellzugriff">
+  <a href="{TEL_LINK}">{icon("telefon","ikon-klein")}<span>Anrufen</span></a>
+  <a href="{ROUTE}" rel="noopener" target="_blank">{icon("ort","ikon-klein")}<span>Route</span></a>
+  <a href="{praefix}{TERMIN}">{icon("uhr","ikon-klein")}<span>Termin</span></a>
+</nav>
 <script src="{praefix}assets/js/app.js?v={version("assets/js/app.js")}" defer></script>
 <script src="{praefix}assets/js/statistik.js" defer></script>
 </body>
@@ -196,7 +223,7 @@ def termin_band(praefix=""):
     </div>
     <div class="knoepfe">
       <a class="knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")} {TEL}</a>
-      <a class="knopf knopf-rand-hell" href="mailto:{MAIL}">E-Mail schreiben</a>
+      <a class="knopf knopf-rand-hell" href="{praefix}{TERMIN}">Termin anfragen</a>
     </div>
   </div>
 </section>'''
@@ -219,6 +246,19 @@ def schreibe(pfad, inhalt):
     if "–" in inhalt or "—" in inhalt:
         sys.exit(f"FEHLER: Gedankenstrich in {pfad}")
     p.write_text(inhalt, encoding="utf-8")
+
+DOWNLOADS = [("anmeldebogen-zahnzentrum-messerschmidt.pdf", "Anmeldebogen", "Ihre Kontaktdaten und Versicherung"),
+             ("gesundheitsfragebogen-zahnzentrum-messerschmidt.pdf", "Gesundheitsfragebogen", "Angaben zu Erkrankungen, Medikamenten und Allergien"),
+             ("allgemeine-informationen-zahnzentrum-messerschmidt.pdf", "Allgemeine Informationen", "Termine, Kosten und Behandlungsvertrag")]
+def downloads_html(praefix=""):
+    return '<ul class="downloads">' + "".join(
+        f'<li><a href="{praefix}downloads/{d}" download>{icon("download","ikon-klein")}<span><strong>{t}</strong><small>{x} · PDF</small></span></a></li>'
+        for d, t, x in DOWNLOADS) + "</ul>"
+
+def ratgeber_karten(praefix=""):
+    import datetime as dt
+    return "".join(f'''<a class="ratgeber-karte" href="{praefix}ratgeber/{r["slug"]}.html"><span class="klein">{dt.date.fromisoformat(r["datum"]).strftime("%d.%m.%Y")} · {r["lesezeit"]} Min. Lesezeit</span><h3>{html.escape(r["titel"])}</h3><p>{html.escape(r["kurz"][:150].rsplit(" ",1)[0])} …</p><span class="mehr">Weiterlesen {icon("pfeil","ikon-pfeil")}</span></a>'''
+                   for r in sorted(RATGEBER, key=lambda r: r["datum"], reverse=True))
 
 START_FAQ = [
   ("Wo liegt das Zahnzentrum Messerschmidt?", "Das Zahnzentrum liegt in der Parkstraße 33 in 55130 Mainz-Laubenheim. Die Einfahrt erreichen Sie über die Hans-Zöller-Straße 114, Parkplätze gibt es direkt am Haus. Die Buslinien 61, 63 und 64 halten an der Haltestelle Hans-Zöller-Straße."),
@@ -255,7 +295,7 @@ def startseite():
     <h1 id="hero-titel"><span class="zeile"><span>Kompetenz</span></span><span class="zeile"><span>im Detail.</span></span></h1>
     <p class="hero-unterzeile">Moderne Zahnmedizin in einem hellen, eigens gebauten Haus. Für Ihr Lächeln, ein Leben lang.</p>
     <div class="knoepfe">
-      <a class="knopf" href="{TEL_LINK}">Termin vereinbaren</a>
+      <a class="knopf" href="{TERMIN}">Termin anfragen</a>
       <a class="knopf knopf-rand-hell" href="leistungen.html">Leistungen entdecken</a>
     </div>
   </div>
@@ -335,6 +375,31 @@ def startseite():
   </div>
 </section>
 
+<section class="abschnitt bewertungen">
+  <div class="wrap bewertungen-zeile">
+    <div>
+      <p class="dachzeile">Bewertungen</p>
+      <h2>Was unsere Patienten sagen.</h2>
+      <p>Lesen Sie, wie andere Patienten ihren Besuch im Zahnzentrum erlebt haben. Und wenn Sie zufrieden waren: Ihre Bewertung hilft anderen Menschen bei der Suche nach einer Zahnarztpraxis.</p>
+    </div>
+    <div class="bewertungen-karte">
+      <div class="sterne" aria-hidden="true">★★★★★</div>
+      <p><strong>Zahnzentrum Messerschmidt auf Google</strong><br>Bewertungen lesen oder selbst eine abgeben</p>
+      <a class="knopf" href="{GOOGLE_BEWERTUNGEN}" rel="noopener" target="_blank">Bewertungen auf Google</a>
+      <p class="klein">Der Link öffnet Google Maps. Auf dieser Seite werden keine Inhalte von Google geladen.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap abschnitt">
+  <div class="abschnitt-kopf">
+    <p class="dachzeile">Ratgeber</p>
+    <h2>Wissen für gesunde Zähne.</h2>
+  </div>
+  <div class="ratgeber-raster">{ratgeber_karten("")}</div>
+  <p style="margin-top:28px"><a class="mehr" href="ratgeber.html">Alle Artikel {icon("pfeil","ikon-pfeil")}</a></p>
+</section>
+
 <section class="wrap abschnitt zwei faq-start">
   <div class="text-spalte">
     <p class="dachzeile">Häufige Fragen</p>
@@ -347,7 +412,7 @@ def startseite():
 <section class="wrap abschnitt kontakt-kurz">
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("ort")}<h3>Anfahrt</h3><p>{ADRESSE[0]}<br>{ADRESSE[1]}<br>Einfahrt über die Hans-Zöller-Straße 114, Parkplätze direkt am Haus.</p><a class="mehr" href="kontakt.html#anfahrt">Anfahrt ansehen {icon("pfeil","ikon-pfeil")}</a></div>
-    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend<br>Freitag 8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
+    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-offen></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend<br>Freitag 8:00 bis 16:00 Uhr</p><a class="mehr" href="{TERMIN}">Termin anfragen {icon("pfeil","ikon-pfeil")}</a></div>
     <div class="kachel">{icon("telefon")}<h3>Kontakt</h3><p><a href="{TEL_LINK}">{TEL}</a><br><a href="mailto:{MAIL}">{MAIL}</a></p><p class="klein">Notdienst außerhalb der Sprechzeiten:<br><a href="tel:+4961316246999">06131 6246-999</a></p><a class="mehr" href="kontakt.html#anfrage">Anfrage senden {icon("pfeil","ikon-pfeil")}</a></div>
   </div>
 </section>
@@ -581,6 +646,8 @@ def patienteninfos():
   <div class="kachel">
     <h2>Ihr erster Besuch</h2>
     <p>Für den ersten Besuch benötigen wir einen ausgefüllten Anamnesebogen mit Angaben zu Ihrer Gesundheit, zu Allergien und Medikamenten. So können wir Befunde besser einschätzen und die passende Behandlung planen.</p>
+    <p>Die Bögen können Sie vorab herunterladen, zu Hause ausfüllen und zum ersten Termin mitbringen. Alles zum ersten Besuch finden Sie auf unserer Seite <a href="neu-bei-uns.html">Neu bei uns</a>.</p>
+    {downloads_html("")}
     <p class="klein-titel">Bitte bringen Sie mit</p>
     <ul class="haken-liste">
       <li>Ihre Gesundheitskarte</li><li>gegebenenfalls Ihre Medikationsliste</li><li>gegebenenfalls Röntgenpass und Allergiepass</li>
@@ -616,16 +683,17 @@ def kontakt():
   <h2 class="sr-only">Kontaktdaten und Sprechzeiten</h2>
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("telefon")}<h3>Telefon und E-Mail</h3><p><a class="gross-link" href="{TEL_LINK}">{TEL}</a><br>Fax 06131 86936<br><a href="mailto:{MAIL}">{MAIL}</a></p></div>
-    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
+    <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p><span class="offen-anzeige" data-offen></span></p><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
     <div class="kachel kachel-akzent">{icon("herz")}<h3>Zahnärztlicher Notdienst</h3><p>Außerhalb unserer Sprechzeiten wenden Sie sich bitte an den zahnärztlichen Notdienst:</p><p><a class="gross-link" href="tel:+4961316246999">06131 6246-999</a></p></div>
   </div>
 </section>
 
 <section id="anfrage" class="wrap abschnitt zwei anfrage">
   <div class="text-spalte">
-    <p class="dachzeile">Anfrage</p>
-    <h2>Schreiben Sie uns.</h2>
-    <p>Sie wünschen einen Termin oder einen Rückruf? Schicken Sie uns Ihre Anfrage, wir melden uns schnellstmöglich bei Ihnen.</p>
+    <p class="dachzeile">Termin anfragen</p>
+    <h2>Ihr Wunschtermin.</h2>
+    <p>Sie möchten einen Termin oder einen Rückruf? Schicken Sie uns Ihre Anfrage mit Ihren Wunschzeiten. Wir melden uns schnellstmöglich und bestätigen Ihren Termin telefonisch oder per E-Mail.</p>
+    <p>Lieber persönlich? Rufen Sie uns an unter <a href="{TEL_LINK}">{TEL}</a>.</p>
     <p class="klein">Bitte schreiben Sie keine ausführlichen Angaben zu Ihrer Gesundheit in das Formular. Das besprechen wir gerne am Telefon oder in der Praxis. Bei akuten Schmerzen rufen Sie uns bitte direkt an.</p>
   </div>
   <form class="formular" action="anfrage-senden.php" method="post" novalidate>
@@ -716,6 +784,8 @@ def rechtliches():
 <p>Das Video auf der Startseite liegt auf unserem eigenen Server. Es wird nichts von YouTube, Vimeo oder anderen Anbietern geladen.</p>
 <h2>Besucherstatistik (Matomo)</h2>
 <p>Wir nutzen die Statistik-Software Matomo, betrieben auf einem Server der AO Consulting GmbH, Zeiloch 13, 76646 Bruchsal, in Deutschland. Matomo arbeitet hier ohne Cookies und ohne Speicherung auf Ihrem Gerät; Ihre IP-Adresse wird vor der Verarbeitung um zwei Bytes gekürzt. Erfasst werden Mengen und Muster, keine Personen. Rechtsgrundlage ist unser berechtigtes Interesse an der Verbesserung der Seite (Art. 6 Abs. 1 lit. f DSGVO); da nichts auf Ihrem Gerät gespeichert wird, ist keine Einwilligung nach § 25 TDDDG nötig. Sie können widersprechen, indem Sie in Ihrem Browser „Do Not Track“ aktivieren. Die Daten werden nach 13 Monaten gelöscht.</p>
+<h2>Einstellungen zur Darstellung</h2>
+<p>Wenn Sie unten auf der Seite „Schrift größer“ oder „Bewegung aus“ wählen, speichert Ihr Browser diese Einstellung lokal auf Ihrem Gerät, damit sie beim nächsten Seitenaufruf erhalten bleibt. Diese Angabe wird nicht an uns übertragen und kann jederzeit durch erneutes Klicken oder Löschen der Browserdaten entfernt werden. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG, da die Speicherung für die von Ihnen ausdrücklich gewünschte Funktion erforderlich ist.</p>
 <h2>Keine Cookies, keine eingebetteten Inhalte</h2>
 <p>Diese Webseite setzt keine Cookies. Es werden keine Schriften, Karten oder Skripte von Drittanbietern geladen. Links zu Instagram, Facebook, WhatsApp, Google Maps (Routenplanung) oder zu unserer Karriereseite führen auf andere Seiten; erst beim Klick gelten deren Datenschutzbestimmungen.</p>
 <h2>Weitergabe an Dritte</h2>
@@ -728,6 +798,134 @@ def rechtliches():
 </section>'''
     s += fuss()
     schreibe("datenschutz.html", s)
+
+def neu_bei_uns():
+    brot = [("Startseite", ""), ("Neu bei uns", "neu-bei-uns.html")]
+    faq = [("Nehmen Sie neue Patienten auf?", "Sprechen Sie uns gerne an. Am Telefon oder über das Anfrageformular klären wir, wann wir einen Termin für Sie haben."),
+           ("Wie lange dauert der erste Termin?", "Für den ersten Termin planen wir ausreichend Zeit für Gespräch und Untersuchung ein. Wie lange es dauert, hängt davon ab, ob schon eine Behandlung nötig ist."),
+           ("Kann ich die Bögen auch in der Praxis ausfüllen?", "Ja. Wenn Sie etwas früher kommen, füllen Sie die Bögen einfach bei uns am Empfang aus.")]
+    s = kopf("Neu bei uns: Ihr erster Besuch | Zahnzentrum Messerschmidt",
+             "Ihr erster Besuch im Zahnzentrum Messerschmidt in Mainz-Laubenheim: Ablauf, Anmeldebogen und Gesundheitsfragebogen zum Herunterladen, Anfahrt und Parken.",
+             "neu-bei-uns.html", schema=[brotkrumen_schema(brot), {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}])
+    s += brotkrumen_html(brot)
+    s += seitenkopf("Neu bei uns", "Herzlich willkommen im Zahnzentrum.", "Schön, dass Sie zu uns kommen möchten. Hier finden Sie alles, was Sie für Ihren ersten Besuch wissen sollten: vom Termin über die Unterlagen bis zum Parkplatz.")
+    s += f'''
+<section class="wrap abschnitt">
+  <div class="abschnitt-kopf"><p class="dachzeile">So einfach geht es</p><h2>Ihr erster Besuch in vier Schritten.</h2></div>
+  <ol class="ablauf ablauf-gross">
+    <li><strong>Termin anfragen</strong><span>Rufen Sie uns an unter {TEL} oder nutzen Sie unser <a href="{TERMIN}">Anfrageformular</a>. Sagen Sie uns gerne gleich, ob Sie Beschwerden oder Sorgen haben.</span></li>
+    <li><strong>Unterlagen vorbereiten</strong><span>Laden Sie Anmeldebogen und Gesundheitsfragebogen herunter und füllen Sie sie zu Hause in Ruhe aus.</span></li>
+    <li><strong>Ankommen</strong><span>Parken Sie direkt am Haus, Einfahrt über die Hans-Zöller-Straße 114. Melden Sie sich am Empfang, wir sind für Sie da.</span></li>
+    <li><strong>Kennenlernen und Untersuchung</strong><span>Wir sprechen über Ihre Wünsche, untersuchen Zähne und Zahnfleisch und erklären Ihnen, was wir sehen und was als Nächstes sinnvoll ist.</span></li>
+  </ol>
+</section>
+
+<section class="abschnitt flaeche">
+  <div class="wrap zwei-text">
+    <div class="kachel">
+      <h2>Unterlagen zum Herunterladen</h2>
+      <p>Bitte drucken Sie die Bögen aus, füllen Sie sie aus und bringen Sie sie unterschrieben zum ersten Termin mit. Bitte schicken Sie ausgefüllte Gesundheitsbögen nicht per E-Mail.</p>
+      {downloads_html("")}
+    </div>
+    <div class="kachel">
+      <h2>Bitte bringen Sie mit</h2>
+      <ul class="haken-liste"><li>Ihre Gesundheitskarte</li><li>den ausgefüllten Anmelde- und Gesundheitsbogen</li><li>gegebenenfalls Ihre Medikationsliste</li><li>gegebenenfalls Röntgenpass und Allergiepass</li><li>Ihr Bonusheft, falls vorhanden</li></ul>
+      <h2 style="margin-top:28px">Anfahrt und Parken</h2>
+      <p>{ADRESSE[0]}, {ADRESSE[1]}. Parkplätze direkt am Haus, Buslinien 61, 63 und 64 (Haltestelle Hans-Zöller-Straße).</p>
+      <a class="mehr" href="kontakt.html#anfahrt">Anfahrt ansehen {icon("pfeil","ikon-pfeil")}</a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap abschnitt zwei">
+  <div class="text-spalte">
+    <p class="dachzeile">Ein mulmiges Gefühl?</p>
+    <h2>Sagen Sie es uns einfach.</h2>
+    <p>Viele Menschen gehen nicht gerne zum Zahnarzt. Wenn Sie uns das bei der Terminvereinbarung sagen, planen wir mehr Zeit ein und gehen in Ihrem Tempo vor.</p>
+    <a class="mehr" href="leistungen/stressfreier-besuch.html">Mehr für Angstpatienten {icon("pfeil","ikon-pfeil")}</a>
+  </div>
+  <div class="faq-liste">{"".join(f'<details><summary>{html.escape(q)}</summary><p>{html.escape(a)}</p></details>' for q, a in faq)}</div>
+</section>'''
+    s += termin_band() + fuss()
+    schreibe("neu-bei-uns.html", s)
+
+def ratgeber():
+    import datetime as dt
+    brot = [("Startseite", ""), ("Ratgeber", "ratgeber.html")]
+    s = kopf("Ratgeber Zahngesundheit | Zahnzentrum Messerschmidt",
+             "Ratgeber vom Zahnzentrum Messerschmidt in Mainz: verständliche Antworten auf häufige Fragen zu Zahnfleisch, Kinderzähnen, Zahnersatz und Kosten.",
+             "ratgeber.html", schema=[brotkrumen_schema(brot)])
+    s += brotkrumen_html(brot)
+    s += seitenkopf("Ratgeber", "Wissen für gesunde Zähne.", "Verständliche Antworten auf Fragen, die uns Patienten häufig stellen. Ersetzt keine Untersuchung, hilft aber bei der Orientierung.")
+    s += f'''
+<section class="wrap abschnitt"><h2 class="sr-only">Alle Artikel</h2><div class="ratgeber-raster">{ratgeber_karten("")}</div></section>'''
+    s += termin_band() + fuss()
+    schreibe("ratgeber.html", s)
+    for r in RATGEBER:
+        pfad = f'ratgeber/{r["slug"]}.html'
+        brot = [("Startseite", ""), ("Ratgeber", "ratgeber.html"), (r["titel"], pfad)]
+        l = next(x for x in LEISTUNGEN if x["slug"] == r["leistung"])
+        text = "".join(f'<section class="text-block"><h2>{html.escape(t)}</h2>' + "".join(f"<p>{html.escape(a)}</p>" for a in absaetze) + "</section>" for t, absaetze in r["abschnitte"])
+        datum = dt.date.fromisoformat(r["datum"]).strftime("%d.%m.%Y")
+        schema = [brotkrumen_schema(brot), {"@context": "https://schema.org", "@type": "Article", "headline": r["titel"], "description": r["beschreibung"],
+                  "datePublished": r["datum"], "dateModified": r["datum"], "inLanguage": "de-DE", "mainEntityOfPage": f"{DOMAIN}/{pfad}",
+                  "image": DOMAIN + "/assets/img/og-bild.jpg", "author": {"@id": DOMAIN + "/#praxis"}, "publisher": {"@id": DOMAIN + "/#praxis"}}]
+        s = kopf(f'{r["seo"]} | {FIRMA}', r["beschreibung"], pfad, praefix="../", schema=schema)
+        s = s.replace('<meta property="og:type" content="website">', '<meta property="og:type" content="article">')
+        s += brotkrumen_html(brot, praefix="../")
+        s += seitenkopf(f'Ratgeber · {r["lesezeit"]} Min. Lesezeit', html.escape(r["titel"]), f"Veröffentlicht am {datum} vom Zahnzentrum Messerschmidt, Mainz-Laubenheim.", praefix="../")
+        s += f'''
+<div class="wrap abschnitt leistung-raster">
+  <article class="leistung-text">
+    <aside class="kurz-erklaert" aria-label="Kurz erklärt"><p class="klein-titel">Kurz erklärt</p><p>{html.escape(r["kurz"])}</p></aside>
+    {text}
+    <p class="klein">Dieser Artikel dient der allgemeinen Information und ersetzt keine zahnärztliche Untersuchung und Beratung.</p>
+  </article>
+  <aside class="leistung-seite" aria-label="Kontakt und passende Leistung">
+    <div class="cta-karte">
+      <p class="klein-titel">Haben Sie Fragen?</p>
+      <p>Wir beraten Sie gerne persönlich in unserer Praxis in Mainz-Laubenheim.</p>
+      <a class="knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")} {TEL}</a>
+      <a class="knopf knopf-rand" href="../{TERMIN}">Termin anfragen</a>
+    </div>
+    <p class="dachzeile">Passende Leistung</p>
+    <ul class="leistung-menue"><li><a href="../leistungen/{l["slug"]}.html">{icon(l["icon"],"ikon-klein")}<span>{html.escape(l["kurz"])}</span></a></li></ul>
+  </aside>
+</div>'''
+        s += fuss(praefix="../")
+        schreibe(pfad, s)
+
+def barrierefreiheit():
+    brot = [("Startseite", ""), ("Barrierefreiheit", "barrierefreiheit.html")]
+    s = kopf("Barrierefreiheit | Zahnzentrum Messerschmidt", "Erklärung zur Barrierefreiheit der Webseite des Zahnzentrums Messerschmidt: was wir umgesetzt haben, Darstellung anpassen und wie Sie uns Barrieren melden.",
+             "barrierefreiheit.html", schema=[brotkrumen_schema(brot)])
+    s += brotkrumen_html(brot)
+    s += f'''
+<section class="wrap abschnitt rechtstext">
+<h1>Barrierefreiheit</h1>
+<p>Wir möchten, dass alle Menschen diese Webseite gut nutzen können. Deshalb haben wir sie nach den Grundsätzen der Web Content Accessibility Guidelines (WCAG 2.1) gestaltet.</p>
+<h2>Was wir umgesetzt haben</h2>
+<ul class="haken-liste">
+  <li>Gut lesbare Kontraste zwischen Schrift und Hintergrund</li>
+  <li>Bedienung vollständig mit der Tastatur, sichtbare Markierung des ausgewählten Elements</li>
+  <li>Ein Link „Zum Inhalt springen“ am Seitenanfang</li>
+  <li>Beschreibende Alternativtexte für alle Bilder</li>
+  <li>Klare Überschriften-Struktur für Screenreader</li>
+  <li>Das Video auf der Startseite lässt sich anhalten und hat keinen Ton</li>
+  <li>Bewegungseffekte entfallen, wenn Ihr Gerät „Bewegung reduzieren“ eingestellt hat</li>
+  <li>Formularfelder sind beschriftet, Fehlermeldungen werden vorgelesen</li>
+</ul>
+<h2>Darstellung anpassen</h2>
+<p>Ganz unten auf jeder Seite können Sie die Schrift vergrößern und Bewegungseffekte ausschalten. Ihr Browser merkt sich diese Einstellung auf Ihrem Gerät. Daneben können Sie die Seite wie gewohnt mit Ihrem Browser vergrößern (Strg und Plus, am Mac Cmd und Plus).</p>
+<div class="fuss-hilfen fuss-hilfen-seite"><button type="button" class="hilfe-knopf" data-hilfe="gross-schrift" aria-pressed="false">Schrift größer</button><button type="button" class="hilfe-knopf" data-hilfe="ruhig" aria-pressed="false">Bewegung aus</button></div>
+<h2>Bekannte Einschränkungen</h2>
+<p>Die herunterladbaren Patientenbögen (PDF) sind noch nicht vollständig barrierefrei. Gerne helfen wir Ihnen beim Ausfüllen in der Praxis.</p>
+<h2>Barriere melden</h2>
+<p>Ist Ihnen eine Barriere aufgefallen? Schreiben Sie uns an <a href="mailto:{MAIL}">{MAIL}</a> oder rufen Sie uns an unter <a href="{TEL_LINK}">{TEL}</a>. Wir kümmern uns darum.</p>
+<p class="klein">Stand: Oktober 2026</p>
+</section>'''
+    s += fuss()
+    schreibe("barrierefreiheit.html", s)
 
 def fehlerseite():
     s = kopf("Seite nicht gefunden | Zahnzentrum Messerschmidt", "Diese Seite gibt es nicht mehr. Hier finden Sie unsere Leistungen, Sprechzeiten und den Kontakt zum Zahnzentrum Messerschmidt.", "404.html", praefix="/")
@@ -749,13 +947,14 @@ def llms():
          "- Zahnärztlicher Notdienst: 06131 6246-999", "- Praxis gegründet 1995, Zahnzentrum seit 2009",
          "- Zahnärztinnen: " + "; ".join(f'{x["name"]} ({", ".join(x["schwerpunkte"][:2])})' for x in ZAHNAERZTINNEN), "",
          "## Leistungen"] + [f'- [{l["titel"]}]({DOMAIN}/leistungen/{l["slug"]}.html): {l["kurz_erklaert"]}' for l in LEISTUNGEN] + ["",
-         "## Seiten", f"- [Praxis]({DOMAIN}/praxis.html)", f"- [Team]({DOMAIN}/team.html)", f"- [Patienteninfos]({DOMAIN}/patienteninfos.html)",
+         "## Ratgeber"] + [f'- [{r["titel"]}]({DOMAIN}/ratgeber/{r["slug"]}.html): {r["kurz"]}' for r in RATGEBER] + ["",
+         "## Seiten", f"- [Neu bei uns: erster Besuch, Anmeldebögen]({DOMAIN}/neu-bei-uns.html)", f"- [Praxis]({DOMAIN}/praxis.html)", f"- [Team]({DOMAIN}/team.html)", f"- [Patienteninfos]({DOMAIN}/patienteninfos.html)",
          f"- [Kontakt und Anfahrt]({DOMAIN}/kontakt.html)", f"- [Karriere]({KARRIERE})", ""]
     (WEB / "llms.txt").write_text("\n".join(z), encoding="utf-8")
 
 def sitemap():
     seiten = [("", "1.0"), ("leistungen.html", "0.9")] + [(f'leistungen/{l["slug"]}.html', "0.8") for l in LEISTUNGEN] + \
-             [("praxis.html", "0.7"), ("team.html", "0.7"), ("patienteninfos.html", "0.6"), ("kontakt.html", "0.8"), ("impressum.html", "0.2"), ("datenschutz.html", "0.2")]
+             [("praxis.html", "0.7"), ("team.html", "0.7"), ("neu-bei-uns.html", "0.8"), ("ratgeber.html", "0.6")] + [(f'ratgeber/{r["slug"]}.html', "0.6") for r in RATGEBER] + [("barrierefreiheit.html", "0.2"), ("patienteninfos.html", "0.6"), ("kontakt.html", "0.8"), ("impressum.html", "0.2"), ("datenschutz.html", "0.2")]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'] + \
          [f"  <url><loc>{DOMAIN}/{p}</loc><lastmod>{HEUTE}</lastmod><priority>{pr}</priority></url>" for p, pr in seiten] + ["</urlset>", ""]
     (WEB / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
@@ -775,5 +974,5 @@ def pruefe_seo():
         gesehen[ti] = rel
 
 if __name__ == "__main__":
-    startseite(); leistungen(); praxis(); team(); patienteninfos(); kontakt(); rechtliches(); fehlerseite(); llms(); sitemap(); pruefe_seo()
+    startseite(); leistungen(); praxis(); team(); patienteninfos(); kontakt(); rechtliches(); neu_bei_uns(); ratgeber(); barrierefreiheit(); fehlerseite(); llms(); sitemap(); pruefe_seo()
     print("Gebaut:", len(list(WEB.rglob("*.html"))), "Seiten")

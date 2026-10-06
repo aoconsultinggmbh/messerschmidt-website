@@ -68,3 +68,17 @@ wenn im Betriebssystem „Bewegung reduzieren“ an ist.
 - `.htaccess`: 301-Weiterleitungen aller alten WordPress-Adressen, Fehlerseite 404, Zwischenspeicher für Video und Schriften.
   https/ohne-www-Umleitung ist vorbereitet und wird am Livegang-Tag freigeschaltet (alte Seite lief ohne www).
 - Nach dem Livegang: Search Console, Sitemap einreichen, Google-Unternehmensprofil prüfen (gleiche Adresse, Telefon, Sprechzeiten, Webseite).
+
+## Runde 4 (06.10.2026)
+
+- „Jetzt geöffnet“ im Kopf, bei Sprechzeiten und im Fuß (Zeit in Mainz, Mo bis Do 8 bis 20, Fr 8 bis 16). Gesetzliche Feiertage Rheinland-Pfalz
+  2026 und 2027 sind in `website/assets/js/app.js` (FEIERTAGE) hinterlegt, **Ende 2027 ergänzen**. Urlaub/Brückentage der Praxis kennt die Anzeige nicht.
+- Schnellleiste am Handy unten: Anrufen, Route, Termin. Kein WhatsApp auf der Hauptseite (Vorgabe Awan).
+- Terminanfrage über das Kontaktformular (wie auf der alten Seite), Knöpfe „Termin anfragen“ auf allen Seiten.
+- Neue Seite „Neu bei uns“ mit Ablauf, Mitbringliste, Anfahrt und den drei PDF-Bögen (`website/downloads/`, Dateien von der Kundin).
+- Bewertungen: Abschnitt auf der Startseite mit Link zu Google Maps. Bewusst keine eingebetteten Google-Bewertungen
+  (würde Daten an Google senden und eine Einwilligung erfordern) und keine erfundenen Sternezahlen oder Zitate.
+- Ratgeber mit drei ersten Artikeln (`quelltexte/inhalt_ratgeber.py`), Artikel-Daten für Google. Weitere Artikel einfach anhängen.
+  Kundin bitte Artikel freigeben lassen.
+- Barrierefreiheit: Erklärungsseite, Knöpfe „Schrift größer“ und „Bewegung aus“ (Einstellung lokal im Browser, im Datenschutz erwähnt),
+  sichtbare Tastatur-Markierung.
