@@ -145,7 +145,7 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", sche
     </a>
     <nav class="hauptnavi" id="navi" aria-label="Hauptnavigation">
       {navi}
-      <a href="{KARRIERE}" rel="noopener">Karriere</a>
+      <a href="{KARRIERE}" rel="noopener" target="_blank">Karriere</a>
     </nav>
     <span class="offen-anzeige kopf-offen" data-sprechzeit aria-live="polite"></span>
     <a class="knopf knopf-klein kopf-knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")}<span>{TEL}</span></a>
@@ -194,7 +194,7 @@ def fuss(praefix=""):
     </div>
   </div>
   <div class="wrap fuss-unten">
-    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a><span data-einwilligung-huelle> · <button type="button" class="ein-ausloeser" data-einwilligung-oeffnen>Cookie-Einstellungen</button></span> · <a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a> · <a href="{KARRIERE}" rel="noopener">Karriere</a></p>
+    <p>© <span data-jahr>2026</span> {FIRMA} · <a href="{praefix}impressum.html">Impressum</a> · <a href="{praefix}datenschutz.html">Datenschutz</a><span data-einwilligung-huelle> · <button type="button" class="ein-ausloeser" data-einwilligung-oeffnen>Cookie-Einstellungen</button></span> · <a href="{praefix}barrierefreiheit.html">Barrierefreiheit</a> · <a href="{KARRIERE}" rel="noopener" target="_blank">Karriere</a></p>
     <p><a href="https://www.instagram.com/zahnzentrum_messerschmidt/" rel="noopener" target="_blank">Instagram</a> · <a href="https://www.facebook.com/zahnzentrummesserschmidt/" rel="noopener" target="_blank">Facebook</a> · made by <a href="https://ao-consult.de" rel="noopener">AO Consulting</a></p>
   </div>
 </footer>
@@ -373,7 +373,7 @@ def startseite():
       <p class="dachzeile dachzeile-hell">Karriere</p>
       <h2>Werden Sie Teil unseres Teams.</h2>
       <p>Wir suchen ZFA, ZMP und ZMF sowie Auszubildende. Es erwarten Sie nette Kolleginnen, moderne Räume und flexible Arbeitszeiten.</p>
-      <a class="knopf knopf-hell" href="{KARRIERE}" rel="noopener">Zu den offenen Stellen</a>
+      <a class="knopf knopf-hell" href="{KARRIERE}" rel="noopener" target="_blank">Zu den offenen Stellen</a>
     </div>
   </div>
 </section>
@@ -630,7 +630,7 @@ def team():
       <p class="dachzeile">Praxisteam</p>
       <h2>Anmeldung, Prophylaxe und Assistenz.</h2>
       <p>Hinter jeder Behandlung steht ein ganzes Team: Zahnmedizinische Fachangestellte, Fachassistentinnen und Prophylaxeassistentinnen kümmern sich um Ihre Termine, Ihre Vorsorge und begleiten Sie am Behandlungsstuhl. Und wir bilden selbst aus.</p>
-      <a class="mehr" href="{KARRIERE}" rel="noopener">Bei uns arbeiten {icon("pfeil","ikon-pfeil")}</a>
+      <a class="mehr" href="{KARRIERE}" rel="noopener" target="_blank">Bei uns arbeiten {icon("pfeil","ikon-pfeil")}</a>
     </div>
   </div>
 </section>'''
