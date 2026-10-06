@@ -6,7 +6,7 @@ Aufruf im Projektordner:  python3 quelltexte/bauen.py
 Nur Python-Standardbibliothek. Texte stehen hier und in inhalt_leistungen.py.
 Regeln: Sie-Ansprache, keine Gedankenstriche, keine Heilversprechen, keine externen Dateien.
 """
-import html, json, sys
+import hashlib, html, json, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -53,6 +53,10 @@ def bild(name, alt, w, h, cls="", lazy=True, praefix=""):
 NAVI = [("leistungen.html", "Leistungen"), ("praxis.html", "Praxis"), ("team.html", "Team"),
         ("patienteninfos.html", "Patienteninfos"), ("kontakt.html", "Kontakt")]
 
+def version(datei):
+    """Kurzer Fingerabdruck der Datei, damit Browser nach jeder Änderung die neue CSS/JS laden."""
+    return hashlib.md5((WEB / datei).read_bytes()).hexdigest()[:8]
+
 def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse=""):
     canon = f"{DOMAIN}/{pfad}" if pfad else f"{DOMAIN}/"
     akt = ' aria-current="page"'
@@ -77,7 +81,7 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse=""):
 <link rel="icon" href="{praefix}assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{praefix}assets/img/apple-touch-icon.png">
 <link rel="preload" href="{praefix}assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{praefix}assets/css/stil.css">
+<link rel="stylesheet" href="{praefix}assets/css/stil.css?v={version("assets/css/stil.css")}">
 </head>
 <body class="{body_klasse}">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,7 +133,7 @@ def fuss(praefix=""):
     <p><a href="https://www.instagram.com/zahnzentrum_messerschmidt/" rel="noopener" target="_blank">Instagram</a> · <a href="https://www.facebook.com/zahnzentrummesserschmidt/" rel="noopener" target="_blank">Facebook</a> · made by <a href="https://ao-consult.de" rel="noopener">AO Consulting</a></p>
   </div>
 </footer>
-<script src="{praefix}assets/js/app.js" defer></script>
+<script src="{praefix}assets/js/app.js?v={version("assets/js/app.js")}" defer></script>
 <script src="{praefix}assets/js/statistik.js" defer></script>
 </body>
 </html>
