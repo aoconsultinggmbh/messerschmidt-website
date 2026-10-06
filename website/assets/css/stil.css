@@ -262,3 +262,83 @@ p{margin:0 0 1.1em}
   .js .einblenden.sichtbar{opacity:1;transform:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none !important;animation:none !important}}
+
+/* ---------- Bewegung und Effekte ---------- */
+.kopf{transition:background .3s,border-color .3s,transform .35s ease}
+.kopf-weg{transform:translateY(-100%)}
+/* Hero: Zeilen gleiten von unten herein, Video zoomt ganz langsam */
+.hero h1 .zeile{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .zeile>span{display:inline-block}
+@media (prefers-reduced-motion:no-preference){
+  .hero h1 .zeile>span{transform:translateY(105%);transition:transform 1.1s cubic-bezier(.2,.7,.1,1)}
+  .hero h1 .zeile:nth-child(2)>span{transition-delay:.12s}
+  .geladen .hero h1 .zeile>span{transform:none}
+  .hero .dachzeile,.hero-unterzeile,.hero .knoepfe{opacity:0;transform:translateY(20px);transition:opacity .9s ease .35s,transform .9s ease .35s}
+  .hero-unterzeile{transition-delay:.5s}.hero .knoepfe{transition-delay:.65s}
+  .geladen .hero .dachzeile,.geladen .hero-unterzeile,.geladen .hero .knoepfe{opacity:1;transform:none}
+  .hero-video{animation:hero-zoom 30s ease-in-out infinite alternate}
+  @keyframes hero-zoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+}
+/* Leitsatz, der sich beim Scrollen füllt */
+.aussage{padding:clamp(70px,12vw,170px) 0}
+.aussage-text{font-size:clamp(28px,4.4vw,58px);font-weight:800;line-height:1.18;letter-spacing:-.02em;max-width:22ch;margin:0}
+.aussage-text span{color:rgba(11,31,51,.14);transition:color .35s ease}
+.aussage-text span.an{color:var(--nacht)}
+.aussage-text span.an:nth-child(-n+6){color:var(--blau)}
+@media (prefers-reduced-motion:reduce){.aussage-text span{color:var(--nacht)}}
+/* Laufband */
+.laufband{overflow:hidden;background:#fff;border-top:1px solid var(--linie);border-bottom:1px solid var(--linie);padding:26px 0}
+.laufband-spur{display:flex;align-items:center;gap:34px;width:max-content;animation:laufband 38s linear infinite}
+.laufband span{font-size:clamp(28px,3.6vw,46px);font-weight:800;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1.2px var(--nacht);white-space:nowrap;transition:color .3s}
+.laufband span:hover{color:var(--blau);-webkit-text-stroke-color:var(--blau)}
+.laufband i{font-style:normal;color:var(--hellblau);font-size:22px}
+.laufband:hover .laufband-spur{animation-play-state:paused}
+@keyframes laufband{to{transform:translateX(-50%)}}
+/* Parallax-Flächen brauchen einen Rahmen */
+.bild-band{overflow:hidden}
+[data-parallax]{will-change:transform;transform:scale(1.12)}
+@media (max-width:700px){.bild-band [data-parallax]{transform:none !important}}
+/* Bilder werden beim Scrollen enthüllt */
+@media (prefers-reduced-motion:no-preference){
+  .js .bild-quer.einblenden,.js .bild-hoch.einblenden{opacity:1;transform:none;clip-path:inset(12% 12% 12% 12% round var(--radius));transition:clip-path 1.2s cubic-bezier(.2,.7,.1,1)}
+  .js .bild-quer.einblenden img,.js .bild-hoch.einblenden img{transform:scale(1.15);transition:transform 1.6s cubic-bezier(.2,.7,.1,1)}
+  .js .bild-quer.sichtbar,.js .bild-hoch.sichtbar{clip-path:inset(0 0 0 0 round var(--radius))}
+  .js .bild-quer.sichtbar img,.js .bild-hoch.sichtbar img{transform:scale(1)}
+  .js .bild-quer.sichtbar:hover img{transform:scale(1.04)}
+  .leistungen-raster .leistung-karte:nth-child(3n+2){transition-delay:.08s}
+  .leistungen-raster .leistung-karte:nth-child(3n){transition-delay:.16s}
+}
+/* Lichtkegel auf Karten */
+.leistung-karte,.kachel{position:relative;overflow:hidden;isolation:isolate}
+.leistung-karte::before,.kachel::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(132,208,245,.28),transparent 60%)}
+.leistung-karte:hover::before,.kachel:hover::before{opacity:1}
+.leistung-karte .ikon{transition:transform .35s cubic-bezier(.2,.7,.1,1)}
+.leistung-karte:hover .ikon{transform:translateY(-4px) rotate(-6deg) scale(1.08)}
+.knopf{will-change:transform}
+
+/* Team: Platzhalter und Raster */
+.platzhalter-foto{aspect-ratio:4/5;border-radius:12px;border:2px dashed rgba(0,110,183,.35);background:repeating-linear-gradient(135deg,#fff 0 12px,#eef4f9 12px 24px);display:grid;place-items:center;text-align:center;color:var(--blau);font-weight:700;font-size:14px;line-height:1.35}
+.team-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media (max-width:1000px){.team-raster{grid-template-columns:1fr 1fr}}
+.team-person{margin:0;border-radius:var(--radius);overflow:hidden;background:var(--flaeche)}
+.team-person img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .7s ease}
+.team-person:hover img{transform:scale(1.05)}
+.team-person figcaption{padding:16px 18px}
+.team-person strong{display:block;color:var(--nacht)}
+.team-person span{color:var(--grau);font-size:.9rem}
+
+/* Kontaktformular */
+.anfrage{align-items:start}
+.formular{background:var(--flaeche);border-radius:var(--radius);padding:clamp(24px,4vw,40px)}
+.feld{margin-bottom:16px}
+.feld-reihe{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media (max-width:600px){.feld-reihe{grid-template-columns:1fr}}
+.feld label{display:block;font-weight:700;font-size:14px;margin-bottom:6px;color:var(--nacht)}
+.feld input:not([type=checkbox]),.feld select,.feld textarea{width:100%;font:inherit;font-size:16px;padding:13px 16px;border:1.5px solid rgba(11,31,51,.14);border-radius:12px;background:#fff;color:var(--text);transition:border-color .2s,box-shadow .2s}
+.feld input:focus,.feld select:focus,.feld textarea:focus{outline:none;border-color:var(--blau);box-shadow:0 0 0 4px rgba(0,110,183,.12)}
+.feld-zustimmung label{display:flex;gap:10px;font-weight:500;font-size:14px;color:var(--grau)}
+.feld-zustimmung input{margin-top:4px;flex:none;width:18px;height:18px}
+.honigtopf{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.formular-meldung{min-height:1.2em;font-weight:700}
+.formular-meldung.fehler{color:#b42318}.formular-meldung.erfolg{color:#18794e}
+.formular .knopf{margin:4px 0 12px}

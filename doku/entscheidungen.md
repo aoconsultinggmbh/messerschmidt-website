@@ -32,13 +32,21 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 
 ## Offen / bitte bestätigen
 
-- [ ] **Fotos der Zahnärztinnen:** Olga Miller, Dr. Lisa Blatt und Dr. Alina Günther haben vorerst ein Monogramm statt Foto. Welche Portraits aus dem Shooting (Nr. 66–104) sind wer?
+- [ ] **Fotos der Zahnärztinnen:** Olga Miller, Dr. Lisa Blatt und Dr. Alina Günther haben vorerst den Platzhalter „Foto wird nachgereicht“ (Vorgabe Awan).
+- [ ] **Praxisteam-Raster (Team-Seite):** Portraits Nr. 71, 79, 91, 101 mit „Name wird nachgereicht / Funktion wird nachgereicht“. Falls darunter Zahnärztinnen sind, nach oben zu den Behandlerinnen verschieben.
 - [ ] **Team-Liste:** Die bisherige Seite nennt 14 Mitarbeiterinnen namentlich (Stand unklar). Mit Namen aufnehmen? Dann Liste bestätigen lassen.
 - [ ] **Hanh Geyrhofer** wird auf der alten Seite als Kinderzahnärztin/Endodontie genannt, steht aber nicht mehr bei den Zahnärztinnen. Bewusst weggelassen.
 - [ ] **Homöopathie** von der alten Seite nicht übernommen (Heilmittelwerberecht); Akupunktur bleibt als begleitendes Angebot.
 - [ ] **Anamnesebogen/Anmeldebogen** (PDF-Downloads der alten Seite): Dateien von der Kundin holen und auf Patienteninfos verlinken.
-- [ ] **Kontaktformular** bewusst nicht eingebaut (Gesundheitsdaten im Freitext); Kontakt per Telefon/E-Mail. Mit Kundin klären.
+- [x] **Kontaktformular** wieder eingebaut (alte Seite hatte eins, Vorgabe Awan): Kontakt-Seite, `anfrage-senden.php` an info@zahnzentrum-messerschmidt.de, Hinweis „keine Gesundheitsangaben“, Datenschutz ergänzt. Vor dem Livegang Testanfrage.
 - [ ] Impressum: „Umsatzsteueridentifikationsnummer 28/114/5003/0“ ist das Format einer Steuernummer.
 - [ ] Karriere-Link zeigt in der Vorschau auf messerschmidt-karriere.vorschau.ao-consult.de, vor dem Livegang in `quelltexte/bauen.py` (KARRIERE) auf die Karriere-Domain umstellen.
 - [ ] Alte Adressen weiterleiten (Livegang): /uber-uns/ → /team.html, /praxis/… → /praxis.html, /service/patienteninfos/ → /patienteninfos.html, /anfahrt/ und /kontakt/ → /kontakt.html; /leistungen/<name>/ → /leistungen/<name>.html (gleiche Namen).
 - [ ] Matomo-Eintrag anlegen, Kennung in `website/assets/js/statistik.js` (seite) eintragen.
+
+## Effekte (Runde 2, Wunsch Awan: „was Heftiges“)
+
+Hero-Zeilen gleiten herein, Video zoomt langsam; Zähler in der Faktenleiste; Leitsatz füllt sich Wort für Wort beim Scrollen;
+Laufband mit Leistungen (Outline-Schrift); Parallax auf großen Bildflächen; Bilder werden beim Scrollen enthüllt; Lichtkegel folgt der Maus
+auf Karten; Knöpfe mit leichtem Magnet-Effekt; Kopf verschwindet beim Runterscrollen. Alles ohne fremde Bibliothek und abgeschaltet,
+wenn im Betriebssystem „Bewegung reduzieren“ an ist.

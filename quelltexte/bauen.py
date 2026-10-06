@@ -152,7 +152,7 @@ def termin_band(praefix=""):
 </section>'''
 
 def seitenkopf(dach, titel, text, bildname=None, alt="", praefix=""):
-    b = (f'<div class="seitenkopf-bild">{bild(bildname, alt, 2000, 1000, lazy=False, praefix=praefix)}</div>' if bildname else "")
+    b = (f'<div class="seitenkopf-bild" data-parallax>{bild(bildname, alt, 2000, 1000, lazy=False, praefix=praefix)}</div>' if bildname else "")
     return f'''
 <section class="seitenkopf{" mit-bild" if bildname else ""}">
   {b}
@@ -203,7 +203,7 @@ def startseite():
   <div class="hero-schleier"></div>
   <div class="wrap hero-inhalt">
     <p class="dachzeile dachzeile-hell">Zahnzentrum Messerschmidt · Mainz-Laubenheim</p>
-    <h1 id="hero-titel">Kompetenz<br>im Detail.</h1>
+    <h1 id="hero-titel"><span class="zeile"><span>Kompetenz</span></span><span class="zeile"><span>im Detail.</span></span></h1>
     <p class="hero-unterzeile">Moderne Zahnmedizin in einem hellen, eigens gebauten Haus. Für Ihr Lächeln, ein Leben lang.</p>
     <div class="knoepfe">
       <a class="knopf" href="{TEL_LINK}">Termin vereinbaren</a>
@@ -216,10 +216,10 @@ def startseite():
 
 <section class="fakten-leiste" aria-label="Auf einen Blick">
   <div class="wrap fakten-raster">
-    <div><strong>Seit 1995</strong><span>in Mainz-Laubenheim</span></div>
-    <div><strong>4</strong><span>moderne Behandlungszimmer</span></div>
+    <div><strong><span data-zaehler="30">30</span>+ Jahre</strong><span>in Mainz-Laubenheim</span></div>
+    <div><strong><span data-zaehler="4">4</span> Zimmer</strong><span>modern ausgestattet</span></div>
     <div><strong>Eigenes Labor</strong><span>Zahnersatz aus dem Haus</span></div>
-    <div><strong>Bis 20 Uhr</strong><span>Montag bis Donnerstag</span></div>
+    <div><strong>Bis <span data-zaehler="20">20</span> Uhr</strong><span>Montag bis Donnerstag</span></div>
   </div>
 </section>
 
@@ -234,6 +234,10 @@ def startseite():
   <figure class="bild-hoch">{bild("start-sabine", "Dr. Sabine Messerschmidt, Zahnärztin und Praxisinhaberin", 900, 1125)}<figcaption>Dr. med. Sabine Messerschmidt<span>Zahnärztin, Praxisinhaberin</span></figcaption></figure>
 </section>
 
+<section class="aussage" aria-label="Unser Leitsatz">
+  <div class="wrap"><p class="aussage-text" data-woerter>Bei uns steckt die Kompetenz im Detail. Kleine Teile ergeben das große Ganze: moderne Technik, erfahrene Zahnärztinnen und ein Team, das Sie mit einem Lächeln empfängt.</p></div>
+</section>
+
 <section class="abschnitt flaeche">
   <div class="wrap">
     <div class="abschnitt-kopf">
@@ -246,8 +250,10 @@ def startseite():
   </div>
 </section>
 
+<div class="laufband" aria-hidden="true"><div class="laufband-spur"><span>Prophylaxe</span><i aria-hidden="true">✦</i><span>Implantologie</span><i aria-hidden="true">✦</i><span>Parodontologie</span><i aria-hidden="true">✦</i><span>Ästhetik</span><i aria-hidden="true">✦</i><span>Endodontie</span><i aria-hidden="true">✦</i><span>Kinderzahnheilkunde</span><i aria-hidden="true">✦</i><span>Funktionsdiagnostik</span><i aria-hidden="true">✦</i><span>Oralchirurgie</span><i aria-hidden="true">✦</i><span>Eigenes Dentallabor</span><i aria-hidden="true">✦</i><span>Prophylaxe</span><i aria-hidden="true">✦</i><span>Implantologie</span><i aria-hidden="true">✦</i><span>Parodontologie</span><i aria-hidden="true">✦</i><span>Ästhetik</span><i aria-hidden="true">✦</i><span>Endodontie</span><i aria-hidden="true">✦</i><span>Kinderzahnheilkunde</span><i aria-hidden="true">✦</i><span>Funktionsdiagnostik</span><i aria-hidden="true">✦</i><span>Oralchirurgie</span><i aria-hidden="true">✦</i><span>Eigenes Dentallabor</span><i aria-hidden="true">✦</i></div></div>
+
 <section class="abschnitt bild-band">
-  {bild("start-haus", "Das Zahnzentrum Messerschmidt in der Parkstraße in Mainz-Laubenheim", 1600, 1067, cls="bild-band-bild")}
+  <div class="bild-band-bild" data-parallax>{bild("start-haus", "Das Zahnzentrum Messerschmidt in der Parkstraße in Mainz-Laubenheim", 1600, 1067)}</div>
   <div class="wrap bild-band-text">
     <div class="karte-glas">
       <p class="dachzeile">Unsere Praxis</p>
@@ -284,7 +290,7 @@ def startseite():
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("ort")}<h3>Anfahrt</h3><p>{ADRESSE[0]}<br>{ADRESSE[1]}<br>Einfahrt über die Hans-Zöller-Straße 114, Parkplätze direkt am Haus.</p><a class="mehr" href="kontakt.html#anfahrt">Anfahrt ansehen {icon("pfeil","ikon-pfeil")}</a></div>
     <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend<br>Freitag 8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
-    <div class="kachel">{icon("telefon")}<h3>Kontakt</h3><p><a href="{TEL_LINK}">{TEL}</a><br><a href="mailto:{MAIL}">{MAIL}</a></p><p class="klein">Notdienst außerhalb der Sprechzeiten:<br><a href="tel:+4961316246999">06131 6246-999</a></p></div>
+    <div class="kachel">{icon("telefon")}<h3>Kontakt</h3><p><a href="{TEL_LINK}">{TEL}</a><br><a href="mailto:{MAIL}">{MAIL}</a></p><p class="klein">Notdienst außerhalb der Sprechzeiten:<br><a href="tel:+4961316246999">06131 6246-999</a></p><a class="mehr" href="kontakt.html#anfrage">Anfrage senden {icon("pfeil","ikon-pfeil")}</a></div>
   </div>
 </section>
 '''
@@ -416,7 +422,7 @@ def team():
             f = bild(z["foto"], z["name"], 900, 1125)
         else:
             ini = "".join(w[0] for w in z["name"].replace("Dr. med. dent. ", "").replace("Dr. med. ", "").replace(", MSc", "").split()[:2])
-            f = f'<div class="monogramm" aria-hidden="true">{ini}</div>'
+            f = '<div class="platzhalter-foto"><span>Foto wird<br>nachgereicht</span></div>'
         karten.append(f'''
     <article class="person">
       <div class="person-bild">{f}</div>
@@ -441,6 +447,16 @@ def team():
     <h2>Ihre Behandlerinnen.</h2>
   </div>
   <div class="personen">{"".join(karten)}
+  </div>
+</section>
+
+<section class="wrap abschnitt team-raster-abschnitt">
+  <div class="abschnitt-kopf">
+    <p class="dachzeile">Praxisteam</p>
+    <h2>Die Gesichter hinter Ihrer Behandlung.</h2>
+  </div>
+  <div class="team-raster">
+    {"".join(f'<figure class="team-person">{bild(n, "Mitarbeiterin des Zahnzentrums Messerschmidt", 720, 900)}<figcaption><strong>Name wird nachgereicht</strong><span>Funktion wird nachgereicht</span></figcaption></figure>' for n in ("team-person-1","team-person-2","team-person-3","team-person-4"))}
   </div>
 </section>
 
@@ -508,6 +524,33 @@ def kontakt():
   </div>
 </section>
 
+<section id="anfrage" class="wrap abschnitt zwei anfrage">
+  <div class="text-spalte">
+    <p class="dachzeile">Anfrage</p>
+    <h2>Schreiben Sie uns.</h2>
+    <p>Sie wünschen einen Termin oder einen Rückruf? Schicken Sie uns Ihre Anfrage, wir melden uns schnellstmöglich bei Ihnen.</p>
+    <p class="klein">Bitte schreiben Sie keine ausführlichen Angaben zu Ihrer Gesundheit in das Formular. Das besprechen wir gerne am Telefon oder in der Praxis. Bei akuten Schmerzen rufen Sie uns bitte direkt an.</p>
+  </div>
+  <form class="formular" action="anfrage-senden.php" method="post" novalidate>
+    <input type="hidden" name="zeit" value="">
+    <div class="honigtopf" aria-hidden="true"><label>Webseite <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="feld-reihe">
+      <div class="feld"><label for="f-name">Vor- und Nachname *</label><input id="f-name" name="name" type="text" required autocomplete="name"></div>
+      <div class="feld"><label for="f-telefon">Telefon *</label><input id="f-telefon" name="telefon" type="tel" required autocomplete="tel"></div>
+    </div>
+    <div class="feld-reihe">
+      <div class="feld"><label for="f-email">E-Mail *</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+      <div class="feld"><label for="f-anliegen">Anliegen *</label><select id="f-anliegen" name="anliegen" required><option value="">Bitte wählen</option><option>Terminwunsch</option><option>Rückruf</option><option>Frage zu einer Leistung</option><option>Sonstiges</option></select></div>
+    </div>
+    <div class="feld"><label for="f-wunsch">Wunschtermin oder beste Erreichbarkeit (optional)</label><input id="f-wunsch" name="wunschzeit" type="text" placeholder="zum Beispiel: dienstags ab 17 Uhr"></div>
+    <div class="feld"><label for="f-nachricht">Nachricht (optional)</label><textarea id="f-nachricht" name="nachricht" rows="4"></textarea></div>
+    <div class="feld feld-zustimmung"><label><input type="checkbox" name="datenschutz" value="ja" required><span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. *</span></label></div>
+    <p class="formular-meldung" role="status" aria-live="polite"></p>
+    <button class="knopf" type="submit">Anfrage senden</button>
+    <p class="klein">Oder direkt per E-Mail an <a class="mail-rueckfall" href="mailto:{MAIL}?subject=Anfrage%20%C3%BCber%20die%20Webseite">{MAIL}</a></p>
+  </form>
+</section>
+
 <section id="anfahrt" class="abschnitt flaeche">
   <div class="wrap zwei">
     <div class="text-spalte">
@@ -570,6 +613,8 @@ def rechtliches():
 <p>Diese Seite nutzt eine SSL-/TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie am „https://“ in der Adresszeile.</p>
 <h2>Kontakt per Telefon, E-Mail oder WhatsApp</h2>
 <p>Wenn Sie uns kontaktieren, verarbeiten wir Ihre Angaben zur Bearbeitung Ihres Anliegens (Art. 6 Abs. 1 lit. b DSGVO bei Terminen und Behandlungen, sonst Art. 6 Abs. 1 lit. f DSGVO). Bitte senden Sie uns per E-Mail keine ausführlichen Gesundheitsangaben, sondern besprechen Sie diese am Telefon oder in der Praxis. E-Mails können auf dem Übertragungsweg unbefugt mitgelesen werden.</p>
+<h2>Kontaktformular</h2>
+<p>Wenn Sie uns über das Kontaktformular schreiben, verarbeiten wir Ihre Angaben (Name, Telefon, E-Mail, Anliegen, Wunschzeit und Nachricht), um Ihre Anfrage zu beantworten. Die Angaben werden per E-Mail an unsere Praxis übermittelt und nicht auf dem Webserver gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei Terminanfragen, im Übrigen unser berechtigtes Interesse an der Beantwortung (Art. 6 Abs. 1 lit. f DSGVO). Bitte machen Sie im Formular keine ausführlichen Angaben zu Ihrer Gesundheit. Wir löschen die Anfrage, sobald sie erledigt ist und keine Aufbewahrungspflicht besteht.</p>
 <h2>Video auf der Startseite</h2>
 <p>Das Video auf der Startseite liegt auf unserem eigenen Server. Es wird nichts von YouTube, Vimeo oder anderen Anbietern geladen.</p>
 <h2>Besucherstatistik (Matomo)</h2>

@@ -38,7 +38,7 @@
 <main id="inhalt">
 
 <section class="seitenkopf mit-bild">
-  <div class="seitenkopf-bild"><picture><source srcset="assets/img/kontakt-kopf.webp" type="image/webp"><img src="assets/img/kontakt-kopf.jpg" alt="Das Gebäude des Zahnzentrums Messerschmidt in Mainz-Laubenheim" width="2000" height="1000" fetchpriority="high"></picture></div>
+  <div class="seitenkopf-bild" data-parallax><picture><source srcset="assets/img/kontakt-kopf.webp" type="image/webp"><img src="assets/img/kontakt-kopf.jpg" alt="Das Gebäude des Zahnzentrums Messerschmidt in Mainz-Laubenheim" width="2000" height="1000" fetchpriority="high"></picture></div>
   <div class="wrap seitenkopf-text">
     <p class="dachzeile dachzeile-hell">Kontakt</p>
     <h1>Wir freuen uns auf Sie.</h1>
@@ -51,6 +51,33 @@
     <div class="kachel"><svg class="ikon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="18"/><path d="M24 13v11l7 5"/></svg><h3>Sprechzeiten</h3><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
     <div class="kachel kachel-akzent"><svg class="ikon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 40S6 29 6 17c0-6 4-10 9-10 4 0 7 2 9 6 2-4 5-6 9-6 5 0 9 4 9 10 0 12-18 23-18 23z"/></svg><h3>Zahnärztlicher Notdienst</h3><p>Außerhalb unserer Sprechzeiten wenden Sie sich bitte an den zahnärztlichen Notdienst:</p><p><a class="gross-link" href="tel:+4961316246999">06131 6246-999</a></p></div>
   </div>
+</section>
+
+<section id="anfrage" class="wrap abschnitt zwei anfrage">
+  <div class="text-spalte">
+    <p class="dachzeile">Anfrage</p>
+    <h2>Schreiben Sie uns.</h2>
+    <p>Sie wünschen einen Termin oder einen Rückruf? Schicken Sie uns Ihre Anfrage, wir melden uns schnellstmöglich bei Ihnen.</p>
+    <p class="klein">Bitte schreiben Sie keine ausführlichen Angaben zu Ihrer Gesundheit in das Formular. Das besprechen wir gerne am Telefon oder in der Praxis. Bei akuten Schmerzen rufen Sie uns bitte direkt an.</p>
+  </div>
+  <form class="formular" action="anfrage-senden.php" method="post" novalidate>
+    <input type="hidden" name="zeit" value="">
+    <div class="honigtopf" aria-hidden="true"><label>Webseite <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="feld-reihe">
+      <div class="feld"><label for="f-name">Vor- und Nachname *</label><input id="f-name" name="name" type="text" required autocomplete="name"></div>
+      <div class="feld"><label for="f-telefon">Telefon *</label><input id="f-telefon" name="telefon" type="tel" required autocomplete="tel"></div>
+    </div>
+    <div class="feld-reihe">
+      <div class="feld"><label for="f-email">E-Mail *</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+      <div class="feld"><label for="f-anliegen">Anliegen *</label><select id="f-anliegen" name="anliegen" required><option value="">Bitte wählen</option><option>Terminwunsch</option><option>Rückruf</option><option>Frage zu einer Leistung</option><option>Sonstiges</option></select></div>
+    </div>
+    <div class="feld"><label for="f-wunsch">Wunschtermin oder beste Erreichbarkeit (optional)</label><input id="f-wunsch" name="wunschzeit" type="text" placeholder="zum Beispiel: dienstags ab 17 Uhr"></div>
+    <div class="feld"><label for="f-nachricht">Nachricht (optional)</label><textarea id="f-nachricht" name="nachricht" rows="4"></textarea></div>
+    <div class="feld feld-zustimmung"><label><input type="checkbox" name="datenschutz" value="ja" required><span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. *</span></label></div>
+    <p class="formular-meldung" role="status" aria-live="polite"></p>
+    <button class="knopf" type="submit">Anfrage senden</button>
+    <p class="klein">Oder direkt per E-Mail an <a class="mail-rueckfall" href="mailto:info@zahnzentrum-messerschmidt.de?subject=Anfrage%20%C3%BCber%20die%20Webseite">info@zahnzentrum-messerschmidt.de</a></p>
+  </form>
 </section>
 
 <section id="anfahrt" class="abschnitt flaeche">
