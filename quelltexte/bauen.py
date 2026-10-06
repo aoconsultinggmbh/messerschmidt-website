@@ -197,6 +197,7 @@ def startseite():
     s += f'''
 <section class="hero" aria-labelledby="hero-titel">
   <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" aria-hidden="true">
+    <source src="assets/video/hero.webm" type="video/webm">
     <source src="assets/video/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-schleier"></div>
