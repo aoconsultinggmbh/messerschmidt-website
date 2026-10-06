@@ -84,8 +84,8 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse=""):
 <header class="{klasse}">
   <div class="wrap kopf-zeile">
     <a class="logo" href="{praefix}index.html" aria-label="{FIRMA}, zur Startseite">
-      <img class="logo-farbe" src="{praefix}assets/img/logo.png" alt="{FIRMA}" width="246" height="135">
-      <img class="logo-weiss" src="{praefix}assets/img/logo-weiss.png" alt="" width="246" height="135">
+      <img class="logo-farbe" src="{praefix}assets/img/logo-quer.png" alt="{FIRMA}" width="650" height="116">
+      <img class="logo-weiss" src="{praefix}assets/img/logo-quer-weiss.png" alt="" width="650" height="116">
     </a>
     <nav class="hauptnavi" id="navi" aria-label="Hauptnavigation">
       {navi}
@@ -104,7 +104,7 @@ def fuss(praefix=""):
 <footer class="fuss">
   <div class="wrap fuss-raster">
     <div class="fuss-marke">
-      <img src="{praefix}assets/img/logo-weiss.png" alt="{FIRMA}" width="246" height="135">
+      <img src="{praefix}assets/img/logo-quer-weiss.png" alt="{FIRMA}" width="650" height="116">
       <p>Zahnmedizin mit Liebe zum Detail in Mainz-Laubenheim.</p>
     </div>
     <div>
