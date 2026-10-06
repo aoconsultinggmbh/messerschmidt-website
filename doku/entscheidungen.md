@@ -50,3 +50,21 @@ Hero-Zeilen gleiten herein, Video zoomt langsam; Zähler in der Faktenleiste; Le
 Laufband mit Leistungen (Outline-Schrift); Parallax auf großen Bildflächen; Bilder werden beim Scrollen enthüllt; Lichtkegel folgt der Maus
 auf Karten; Knöpfe mit leichtem Magnet-Effekt; Kopf verschwindet beim Runterscrollen. Alles ohne fremde Bibliothek und abgeschaltet,
 wenn im Betriebssystem „Bewegung reduzieren“ an ist.
+
+## SEO und GEO (Runde 3, 06.10.2026)
+
+- Inhaltsbreite überall 1500 px (vorher 1320 px).
+- Leistungsseiten ausgebaut (rund 450 bis 650 Wörter statt rund 200): Antwortbox „Kurz erklärt“, ausführliche Abschnitte,
+  Ablauf in Schritten, „Für wen sinnvoll“, Ansprechpartnerinnen mit Link zum Team, FAQ, verwandte Leistungen.
+  „Haben Sie Fragen?“ steht in der rechten Spalte über „Weitere Leistungen“.
+- **Texte von der Kundin freigeben lassen.** Neu und allgemein formuliert (nicht von der alten Seite): Kostenhinweise (Kasse/Privat),
+  Häufigkeiten, Dauer eines Prophylaxetermins (etwa eine Stunde), Handzeichen für Pausen, Begleitperson willkommen, Fluoridlack auf Wunsch,
+  Zuordnung der Ansprechpartnerinnen zu Leistungen (aus den Arbeitsschwerpunkten der Lebensläufe).
+- Strukturierte Daten auf jeder Seite: Dentist/MedicalClinic mit Adresse, Geo-Koordinaten (OpenStreetMap), Sprechzeiten, Fax, sameAs;
+  Startseite zusätzlich WebSite und FAQPage; Leistungsseiten MedicalWebPage, Service, FAQPage, BreadcrumbList; Team: Person je Zahnärztin.
+- Sichtbare Brotkrumen auf allen Unterseiten, FAQ-Bereich auf der Startseite.
+- Titel bis 60 Zeichen und Beschreibungen 110 bis 165 Zeichen, eindeutig je Seite (bauen.py prüft das bei jedem Lauf und warnt).
+- `llms.txt` (Kurzprofil der Praxis für KI-Suchen), Sitemap mit lastmod und Priorität, robots.txt, eigene 404-Seite.
+- `.htaccess`: 301-Weiterleitungen aller alten WordPress-Adressen, Fehlerseite 404, Zwischenspeicher für Video und Schriften.
+  https/ohne-www-Umleitung ist vorbereitet und wird am Livegang-Tag freigeschaltet (alte Seite lief ohne www).
+- Nach dem Livegang: Search Console, Sitemap einreichen, Google-Unternehmensprofil prüfen (gleiche Adresse, Telefon, Sprechzeiten, Webseite).

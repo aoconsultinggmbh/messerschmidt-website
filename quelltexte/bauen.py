@@ -23,6 +23,46 @@ WA = "https://wa.me/4915154321140"
 FIRMA = "Zahnzentrum Messerschmidt"
 ADRESSE = ("Parkstraße 33", "55130 Mainz-Laubenheim")
 ROUTE = "https://www.google.com/maps/dir/?api=1&destination=Parkstra%C3%9Fe%2033%2C%2055130%20Mainz"
+HEUTE = __import__("datetime").date.today().isoformat()
+GEO = (49.95324, 8.31060)  # OpenStreetMap, Eintrag „Zahnzentrum Messerschmidt“, Parkstraße 33 (06.10.2026)
+
+PRAXIS_SCHEMA = {
+    "@context": "https://schema.org", "@type": ["Dentist", "MedicalClinic"], "@id": DOMAIN + "/#praxis",
+    "name": "Zahnzentrum Messerschmidt", "alternateName": "Zahnarztpraxis Dr. Sabine Messerschmidt",
+    "description": "Zahnarztpraxis in Mainz-Laubenheim mit eigenem Dentallabor: Prophylaxe, Parodontologie, Implantologie, Endodontie, ästhetische Zahnheilkunde, Kinderzahnheilkunde, Funktionsdiagnostik und Oralchirurgie.",
+    "url": DOMAIN + "/", "logo": DOMAIN + "/assets/img/logo-quer.png", "image": DOMAIN + "/assets/img/og-bild.jpg",
+    "telephone": "+49 6131 86926", "faxNumber": "+49 6131 86936", "email": "info@zahnzentrum-messerschmidt.de",
+    "address": {"@type": "PostalAddress", "streetAddress": "Parkstraße 33", "postalCode": "55130", "addressLocality": "Mainz",
+                "addressRegion": "Rheinland-Pfalz", "addressCountry": "DE"},
+    "geo": {"@type": "GeoCoordinates", "latitude": GEO[0], "longitude": GEO[1]},
+    "hasMap": "https://www.openstreetmap.org/?mlat=49.95324&mlon=8.31060#map=18/49.95324/8.31060",
+    "areaServed": [{"@type": "City", "name": "Mainz"}, {"@type": "Place", "name": "Mainz-Laubenheim"}],
+    "openingHoursSpecification": [
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "08:00", "closes": "20:00"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "08:00", "closes": "16:00"}],
+    "foundingDate": "1995", "isAcceptingNewPatients": None,
+    "medicalSpecialty": ["Dentistry", "Periodontics", "Endodontics"],
+    "availableService": [],
+    "sameAs": ["https://www.instagram.com/zahnzentrum_messerschmidt/", "https://www.facebook.com/zahnzentrummesserschmidt/"],
+}
+PRAXIS_SCHEMA.pop("isAcceptingNewPatients")
+
+def jsonld(obj):
+    return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>"
+
+def brotkrumen_schema(teile):
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "name": n, "item": DOMAIN + "/" + u} for i, (n, u) in enumerate(teile)]}
+
+def brotkrumen_html(teile, praefix=""):
+    links = []
+    for i, (n, u) in enumerate(teile):
+        if i == len(teile) - 1:
+            links.append(f'<span aria-current="page">{html.escape(n)}</span>')
+        else:
+            links.append(f'<a href="{praefix}{u or "index.html"}">{html.escape(n)}</a>')
+    return '<nav class="wrap brotkrumen" aria-label="Brotkrümelnavigation">' + ' <span aria-hidden="true">/</span> '.join(links) + '</nav>'
+
 
 ICONS = {
  "zahnbuerste": '<path d="M14 34l14-14M24 16l8 8M30 10l8 8"/><path d="M27 13l8-8 8 8-8 8"/><path d="M6 42l8-8"/>',
@@ -57,7 +97,7 @@ def version(datei):
     """Kurzer Fingerabdruck der Datei, damit Browser nach jeder Änderung die neue CSS/JS laden."""
     return hashlib.md5((WEB / datei).read_bytes()).hexdigest()[:8]
 
-def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse=""):
+def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse="", schema=None, og_bild="og-bild.jpg", vorladen=None):
     canon = f"{DOMAIN}/{pfad}" if pfad else f"{DOMAIN}/"
     akt = ' aria-current="page"'
     navi = "".join(f'<a href="{praefix}{h}"{akt if h == pfad else ""}>{t}</a>' for h, t in NAVI)
@@ -76,12 +116,18 @@ def kopf(titel, beschr, pfad, praefix="", hell_start=False, body_klasse=""):
 <meta property="og:title" content="{html.escape(titel)}">
 <meta property="og:description" content="{html.escape(beschr)}">
 <meta property="og:url" content="{canon}">
-<meta property="og:image" content="{DOMAIN}/assets/img/og-bild.jpg">
+<meta property="og:image" content="{DOMAIN}/assets/img/{og_bild}">
+<meta property="og:site_name" content="{FIRMA}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="geo.region" content="DE-RP"><meta name="geo.placename" content="Mainz-Laubenheim"><meta name="geo.position" content="{GEO[0]};{GEO[1]}"><meta name="ICBM" content="{GEO[0]}, {GEO[1]}">
+{f'<link rel="preload" as="image" href="{praefix}{vorladen}">' if vorladen else ""}
 <meta name="theme-color" content="#0b1f33">
 <link rel="icon" href="{praefix}assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="{praefix}assets/img/apple-touch-icon.png">
 <link rel="preload" href="{praefix}assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{praefix}assets/css/stil.css?v={version("assets/css/stil.css")}">
+{jsonld(PRAXIS_SCHEMA)}
+{"".join(jsonld(x) for x in (schema or []))}
 </head>
 <body class="{body_klasse}">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -174,6 +220,15 @@ def schreibe(pfad, inhalt):
         sys.exit(f"FEHLER: Gedankenstrich in {pfad}")
     p.write_text(inhalt, encoding="utf-8")
 
+START_FAQ = [
+  ("Wo liegt das Zahnzentrum Messerschmidt?", "Das Zahnzentrum liegt in der Parkstraße 33 in 55130 Mainz-Laubenheim. Die Einfahrt erreichen Sie über die Hans-Zöller-Straße 114, Parkplätze gibt es direkt am Haus. Die Buslinien 61, 63 und 64 halten an der Haltestelle Hans-Zöller-Straße."),
+  ("Wann hat die Praxis geöffnet?", "Montag bis Donnerstag von 8 bis 20 Uhr durchgehend und freitags von 8 bis 16 Uhr. Termine nach Vereinbarung unter 06131 86926."),
+  ("Welche Leistungen bietet das Zahnzentrum an?", "Prophylaxe und professionelle Zahnreinigung, ästhetische Zahnheilkunde, Parodontologie, Zahnersatz und Implantate, Endodontie, Kinder- und Jugendzahnheilkunde, Funktionsdiagnostik bei CMD und Oralchirurgie. Zahnersatz fertigen wir im eigenen Dentallabor."),
+  ("Ich habe Angst vor dem Zahnarzt. Was kann ich tun?", "Sagen Sie es uns bei der Terminvereinbarung. Wir planen mehr Zeit ein, erklären jeden Schritt und bieten auf Wunsch begleitend Akupunktur an."),
+  ("Ab wann kann ich mit meinem Kind kommen?", "Sobald die ersten Milchzähne da sind. So lernt Ihr Kind die Praxis ganz entspannt kennen."),
+  ("Was mache ich bei Zahnschmerzen am Wochenende?", "Außerhalb unserer Sprechzeiten erreichen Sie den zahnärztlichen Notdienst unter 06131 6246-999."),
+]
+
 # ---------------------------------------------------------------- Startseite
 def startseite():
     karten = "".join(f'''
@@ -183,21 +238,11 @@ def startseite():
         <p>{html.escape(l["teaser"])}</p>
         <span class="mehr">Mehr erfahren {icon("pfeil","ikon-pfeil")}</span>
       </a>''' for l in LEISTUNGEN)
-    jsonld = {
-        "@context": "https://schema.org", "@type": "Dentist", "name": FIRMA, "url": DOMAIN + "/",
-        "image": DOMAIN + "/assets/img/og-bild.jpg", "logo": DOMAIN + "/assets/img/logo.png",
-        "telephone": "+49 6131 86926", "email": MAIL, "faxNumber": "+49 6131 86936",
-        "address": {"@type": "PostalAddress", "streetAddress": "Parkstraße 33", "postalCode": "55130",
-                    "addressLocality": "Mainz", "addressRegion": "Rheinland-Pfalz", "addressCountry": "DE"},
-        "openingHoursSpecification": [
-            {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "08:00", "closes": "20:00"},
-            {"@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "08:00", "closes": "16:00"}],
-        "sameAs": ["https://www.instagram.com/zahnzentrum_messerschmidt/", "https://www.facebook.com/zahnzentrummesserschmidt/"],
-    }
     s = kopf("Zahnarzt Mainz-Laubenheim | Zahnzentrum Messerschmidt",
              "Zahnzentrum Messerschmidt in Mainz-Laubenheim: Prophylaxe, Implantate, Parodontologie, Ästhetik, Kinderzahnheilkunde und eigenes Dentallabor. Mo bis Do bis 20 Uhr.",
-             "", hell_start=True, body_klasse="startseite")
-    s = s.replace("</head>", f'<script type="application/ld+json">{json.dumps(jsonld, ensure_ascii=False)}</script>\n</head>')
+             "", hell_start=True, body_klasse="startseite", vorladen="assets/video/hero-poster.jpg",
+             schema=[{"@context": "https://schema.org", "@type": "WebSite", "@id": DOMAIN + "/#website", "url": DOMAIN + "/", "name": FIRMA, "inLanguage": "de-DE", "publisher": {"@id": DOMAIN + "/#praxis"}},
+                     {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in START_FAQ]}])
     s += f'''
 <section class="hero" aria-labelledby="hero-titel">
   <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg" aria-hidden="true">
@@ -290,6 +335,15 @@ def startseite():
   </div>
 </section>
 
+<section class="wrap abschnitt zwei faq-start">
+  <div class="text-spalte">
+    <p class="dachzeile">Häufige Fragen</p>
+    <h2>Gut zu wissen.</h2>
+    <p>Die wichtigsten Antworten rund um Ihren Besuch im Zahnzentrum Messerschmidt in Mainz-Laubenheim.</p>
+  </div>
+  <div class="faq-liste">{"".join(f'<details><summary>{html.escape(q)}</summary><p>{html.escape(a)}</p></details>' for q, a in START_FAQ)}</div>
+</section>
+
 <section class="wrap abschnitt kontakt-kurz">
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("ort")}<h3>Anfahrt</h3><p>{ADRESSE[0]}<br>{ADRESSE[1]}<br>Einfahrt über die Hans-Zöller-Straße 114, Parkplätze direkt am Haus.</p><a class="mehr" href="kontakt.html#anfahrt">Anfahrt ansehen {icon("pfeil","ikon-pfeil")}</a></div>
@@ -310,13 +364,15 @@ def leistungen():
         <p>{html.escape(l["teaser"])}</p>
         <span class="mehr">Mehr erfahren {icon("pfeil","ikon-pfeil")}</span>
       </a>''' for l in LEISTUNGEN)
-    s = kopf("Leistungen | Zahnzentrum Messerschmidt Mainz-Laubenheim",
+    s = kopf("Zahnarzt-Leistungen Mainz | Zahnzentrum Messerschmidt",
              "Unsere Leistungen: Prophylaxe, Ästhetik, Parodontologie, Zahnersatz und Implantate, Endodontie, Kinderzahnheilkunde, Funktionsdiagnostik, Oralchirurgie.",
-             "leistungen.html")
+             "leistungen.html", schema=[brotkrumen_schema([("Startseite", ""), ("Leistungen", "leistungen.html")])])
+    s += brotkrumen_html([("Startseite", ""), ("Leistungen", "leistungen.html")])
     s += seitenkopf("Leistungen", "Ihre Zahngesundheit hat oberste Priorität.",
                     "Wir verbinden Qualifikation mit moderner Technik. Unsere Zahnärztinnen haben Zusatzqualifikationen in Implantologie, Parodontologie, Endodontie, ästhetischer Zahnheilkunde und Akupunktur. Zahnersatz fertigen wir im eigenen Dentallabor.")
     s += f'''
 <section class="wrap abschnitt">
+  <h2 class="sr-only">Unsere Leistungen im Überblick</h2>
   <div class="leistungen-raster">{karten}
   </div>
   <div class="hinweis-box">
@@ -332,33 +388,62 @@ def leistungen():
     schreibe("leistungen.html", s)
 
     for i, l in enumerate(LEISTUNGEN):
+        pfad = f'leistungen/{l["slug"]}.html'
+        brot = [("Startseite", ""), ("Leistungen", "leistungen.html"), (l["kurz"], pfad)]
         abschn = "".join(f'<section class="text-block"><h2>{html.escape(t)}</h2><p>{html.escape(p)}</p></section>' for t, p in l["abschnitte"])
+        ablauf = "".join(f'<li><strong>{html.escape(t)}</strong><span>{html.escape(x)}</span></li>' for t, x in l["ablauf"])
+        fuer = "".join(f"<li>{html.escape(x)}</li>" for x in l["fuer_wen"])
+        faq = "".join(f'<details><summary>{html.escape(q)}</summary><p>{html.escape(a)}</p></details>' for q, a in l["faq"])
+        aerzt = [Z_NACH_SCHLUESSEL[k] for k in l["aerztinnen"]]
+        aerzt_html = ("<section class=\"text-block\"><h2>Ihre Ansprechpartnerinnen</h2><ul class=\"aerztin-chips\">"
+                      + "".join(f'<li><a href="../team.html#{z["key"]}"><strong>{html.escape(z["name"])}</strong><span>{html.escape(z["schwerpunkte"][0])}</span></a></li>' for z in aerzt)
+                      + "</ul></section>") if aerzt else ""
+        verwandt = "".join(f'<a class="verwandt-karte" href="{x["slug"]}.html">{icon(x["icon"],"ikon-klein")}<span>{html.escape(x["kurz"])}</span></a>'
+                           for x in LEISTUNGEN if x["slug"] in l["verwandt"])
         andere = "".join(f'<li><a href="{x["slug"]}.html">{icon(x["icon"],"ikon-klein")}<span>{html.escape(x["kurz"])}</span></a></li>' for x in LEISTUNGEN if x is not l)
-        s = kopf(f'{l["titel"]} in Mainz-Laubenheim | {FIRMA}', f'{l["titel"]} im Zahnzentrum Messerschmidt in Mainz-Laubenheim. {l["teaser"]}',
-                 f'leistungen/{l["slug"]}.html', praefix="../")
+        schema = [brotkrumen_schema(brot),
+                  {"@context": "https://schema.org", "@type": "MedicalWebPage", "@id": f"{DOMAIN}/{pfad}#seite", "url": f"{DOMAIN}/{pfad}",
+                   "name": l["titel"], "description": l["beschreibung"], "inLanguage": "de-DE", "lastReviewed": HEUTE,
+                   "about": {"@type": "MedicalProcedure", "name": l["titel"], "description": l["kurz_erklaert"]},
+                   "publisher": {"@id": DOMAIN + "/#praxis"}, "isPartOf": {"@id": DOMAIN + "/#website"},
+                   "mainEntity": {"@type": "Service", "name": l["titel"], "serviceType": l["kurz"], "provider": {"@id": DOMAIN + "/#praxis"},
+                                  "areaServed": {"@type": "City", "name": "Mainz"}}},
+                  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in l["faq"]]}]
+        s = kopf(f'{l["seo"]} | {FIRMA}', l["beschreibung"], pfad, praefix="../", schema=schema)
+        s += brotkrumen_html(brot, praefix="../")
         s += seitenkopf(f'Leistungen · {html.escape(l["kurz"])}', html.escape(l["titel"]), html.escape(l["intro"]), praefix="../")
         s += f'''
 <div class="wrap abschnitt leistung-raster">
-  <article class="leistung-text">{abschn}
-    <div class="cta-karte">
-      <h2>Haben Sie Fragen?</h2>
-      <p>Wir beraten Sie gerne persönlich in unserer Praxis.</p>
-      <div class="knoepfe"><a class="knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")} {TEL}</a><a class="knopf knopf-rand" href="mailto:{MAIL}">E-Mail schreiben</a></div>
-    </div>
+  <article class="leistung-text">
+    <aside class="kurz-erklaert" aria-label="Kurz erklärt"><p class="klein-titel">Kurz erklärt</p><p>{html.escape(l["kurz_erklaert"])}</p></aside>
+    {abschn}
+    <section class="text-block"><h2>So läuft die Behandlung ab</h2><ol class="ablauf">{ablauf}</ol></section>
+    <section class="text-block"><h2>Für wen ist das sinnvoll?</h2><ul class="haken-liste">{fuer}</ul></section>
+    {aerzt_html}
+    <section class="text-block faq-liste"><h2>Häufige Fragen</h2>{faq}</section>
+    <section class="text-block"><h2>Das könnte Sie auch interessieren</h2><div class="verwandt">{verwandt}</div></section>
   </article>
-  <aside class="leistung-seite" aria-label="Weitere Leistungen">
+  <aside class="leistung-seite" aria-label="Kontakt und weitere Leistungen">
+    <div class="cta-karte">
+      <p class="klein-titel">Haben Sie Fragen?</p>
+      <p>Wir beraten Sie gerne persönlich in unserer Praxis in Mainz-Laubenheim.</p>
+      <a class="knopf" href="{TEL_LINK}">{icon("telefon","ikon-klein")} {TEL}</a>
+      <a class="knopf knopf-rand" href="../kontakt.html#anfrage">Anfrage senden</a>
+      <p class="klein">Mo bis Do 8 bis 20 Uhr, Fr 8 bis 16 Uhr</p>
+    </div>
     <p class="dachzeile">Weitere Leistungen</p>
     <ul class="leistung-menue">{andere}</ul>
   </aside>
 </div>'''
         s += fuss(praefix="../")
-        schreibe(f'leistungen/{l["slug"]}.html', s)
+        schreibe(pfad, s)
 
 # ---------------------------------------------------------------- Praxis
 def praxis():
-    s = kopf("Unsere Praxis | Zahnzentrum Messerschmidt Mainz-Laubenheim",
+    s = kopf("Unsere Praxis in Mainz-Laubenheim | Zahnzentrum Messerschmidt",
              "Das Zahnzentrum Messerschmidt: eigens gebautes Niedrigenergiehaus, helle Räume, eigenes Dentallabor und Service, der Wohlfühlen leicht macht.",
-             "praxis.html")
+             "praxis.html", schema=[brotkrumen_schema([("Startseite", ""), ("Praxis", "praxis.html")])])
+    s += brotkrumen_html([("Startseite", ""), ("Praxis", "praxis.html")])
     s += seitenkopf("Praxis", "Ein Haus, gebaut für Ihr Wohlbefinden.",
                     "Weiß gekachelte Wände suchen Sie bei uns vergeblich. Unsere Praxis liegt in einem eigens dafür errichteten, nachhaltigen Haus mit viel Licht und freundlicher Atmosphäre.",
                     "praxis-kopf", "Das Zahnzentrum Messerschmidt von oben mit Solaranlage auf dem Dach")
@@ -405,20 +490,22 @@ def praxis():
 
 # ---------------------------------------------------------------- Team
 ZAHNAERZTINNEN = [
-  dict(name="Dr. med. Sabine Messerschmidt", rolle="Zahnärztin, Praxisinhaberin", foto="team-sabine",
+  dict(key="messerschmidt", name="Dr. med. Sabine Messerschmidt", rolle="Zahnärztin, Praxisinhaberin", foto="team-sabine",
        schwerpunkte=["Komplexe prothetisch-chirurgische Rekonstruktionen", "Regenerative Parodontaltherapie und Parodontalchirurgie", "Augmentationschirurgie und Implantologie", "Ganzheitliche Zahnheilkunde"],
        vita=["Studium der Zahnheilkunde in Jena und Erfurt", "1991 Approbation, 1993 Promotion", "1995 Gründung der Praxis in Mainz-Laubenheim", "2009 Gründung des Zahnzentrums Messerschmidt",
              "Tätigkeitsschwerpunkte Akupunktur (1996), Implantologie DGI und APW (2002), Parodontologie (2012), Endodontologie und Ästhetische Zahnheilkunde (2014)", "Seit 2012 Referentin für Fortbildungen von Kolleginnen und Kollegen"]),
-  dict(name="Olga Miller, MSc", rolle="Zahnärztin", foto=None,
+  dict(key="miller", name="Olga Miller, MSc", rolle="Zahnärztin", foto=None,
        schwerpunkte=["Komplexe endodontische Behandlungen", "Ganzheitliche Zahnheilkunde", "Prothetische Sanierungen"],
        vita=["Studium der Zahnmedizin in Göttingen, 2010 Approbation", "2018 Tätigkeitsschwerpunkt Endodontologie und Qualifikation zur Lachgassedierung", "2020 Fachkunde digitale Volumentomographie", "Seit 2024 Master für Implantologie und Parodontologie, Universität Krems"]),
-  dict(name="Dr. med. dent. Lisa Blatt", rolle="Zahnärztin", foto=None,
+  dict(key="blatt", name="Dr. med. dent. Lisa Blatt", rolle="Zahnärztin", foto=None,
        schwerpunkte=["Zahnerhaltung, präventiv und restaurativ", "Ästhetische Zahnheilkunde"],
        vita=["Studium der Zahnmedizin an der Universität Mainz, 2015 Approbation", "2017 Promotion", "Seit 2023 Lehrkraft an der Berufsbildenden Schule 3 in Mainz", "Seit 2024 im Zahnzentrum Messerschmidt"]),
-  dict(name="Dr. med. dent. Alina Günther", rolle="Zahnärztin", foto=None,
+  dict(key="guenther", name="Dr. med. dent. Alina Günther", rolle="Zahnärztin", foto=None,
        schwerpunkte=["Komplexe endodontologische Behandlungen", "Konservierend-chirurgische Behandlungen", "Ganzheitliche Zahnheilkunde"],
        vita=["Studium der Zahnheilkunde in Frankfurt am Main, 2019 Approbation", "Promotion an der MKG-Universitätsklinik Frankfurt", "2023 Hilfseinsatz mit Zahnärzte ohne Grenzen", "Seit 2025 im Zahnzentrum Messerschmidt"]),
 ]
+Z_NACH_SCHLUESSEL = {z["key"]: z for z in ZAHNAERZTINNEN}
+
 def team():
     karten = []
     for z in ZAHNAERZTINNEN:
@@ -428,7 +515,7 @@ def team():
             ini = "".join(w[0] for w in z["name"].replace("Dr. med. dent. ", "").replace("Dr. med. ", "").replace(", MSc", "").split()[:2])
             f = '<div class="platzhalter-foto"><span>Foto wird<br>nachgereicht</span></div>'
         karten.append(f'''
-    <article class="person">
+    <article class="person" id="{z["key"]}">
       <div class="person-bild">{f}</div>
       <div class="person-text">
         <h3>{html.escape(z["name"])}</h3>
@@ -438,9 +525,12 @@ def team():
         <details><summary>Werdegang</summary><ul>{"".join(f"<li>{html.escape(x)}</li>" for x in z["vita"])}</ul></details>
       </div>
     </article>''')
-    s = kopf("Unser Team | Zahnzentrum Messerschmidt Mainz-Laubenheim",
+    s = kopf("Zahnärztinnen & Team | Zahnzentrum Messerschmidt",
              "Lernen Sie unsere Zahnärztinnen kennen: Dr. Sabine Messerschmidt, Olga Miller, Dr. Lisa Blatt und Dr. Alina Günther, dazu unser Praxisteam.",
-             "team.html")
+             "team.html", schema=[brotkrumen_schema([("Startseite", ""), ("Team", "team.html")])] + [
+                 {"@context": "https://schema.org", "@type": "Person", "@id": f'{DOMAIN}/team.html#{z["key"]}', "name": z["name"], "jobTitle": z["rolle"],
+                  "worksFor": {"@id": DOMAIN + "/#praxis"}, "knowsAbout": z["schwerpunkte"]} for z in ZAHNAERZTINNEN])
+    s += brotkrumen_html([("Startseite", ""), ("Team", "team.html")])
     s += seitenkopf("Team", "Modern, kompetent und herzlich.",
                     "Vier Zahnärztinnen und ein engagiertes Team in Anmeldung, Prophylaxe und Assistenz geben jeden Tag ihr Bestes für Ihre Zähne.",
                     "team-kopf", "Das Team des Zahnzentrums Messerschmidt im Behandlungszimmer")
@@ -480,9 +570,10 @@ def team():
 
 # ---------------------------------------------------------------- Patienteninfos
 def patienteninfos():
-    s = kopf("Patienteninfos | Zahnzentrum Messerschmidt Mainz-Laubenheim",
+    s = kopf("Patienteninfos | Zahnzentrum Messerschmidt Mainz",
              "Ihr erster Besuch im Zahnzentrum Messerschmidt: was Sie mitbringen sollten und worauf Sie nach einem chirurgischen Eingriff achten.",
-             "patienteninfos.html")
+             "patienteninfos.html", schema=[brotkrumen_schema([("Startseite", ""), ("Patienteninfos", "patienteninfos.html")])])
+    s += brotkrumen_html([("Startseite", ""), ("Patienteninfos", "patienteninfos.html")])
     s += seitenkopf("Patienteninfos", "Gut vorbereitet zu Ihrem Termin.",
                     "Hier finden Sie die wichtigsten Informationen für Ihren ersten Besuch und für die Zeit nach einem Eingriff.")
     s += f'''
@@ -513,14 +604,16 @@ def patienteninfos():
 
 # ---------------------------------------------------------------- Kontakt
 def kontakt():
-    s = kopf("Kontakt und Anfahrt | Zahnzentrum Messerschmidt Mainz-Laubenheim",
+    s = kopf("Kontakt & Anfahrt | Zahnzentrum Messerschmidt Mainz",
              "So erreichen Sie das Zahnzentrum Messerschmidt: Parkstraße 33, 55130 Mainz-Laubenheim, Telefon 06131 86926. Anfahrt mit Auto, Bus und Bahn.",
-             "kontakt.html")
+             "kontakt.html", schema=[brotkrumen_schema([("Startseite", ""), ("Kontakt", "kontakt.html")])])
+    s += brotkrumen_html([("Startseite", ""), ("Kontakt", "kontakt.html")])
     s += seitenkopf("Kontakt", "Wir freuen uns auf Sie.",
                     "Rufen Sie uns an, schreiben Sie uns oder kommen Sie vorbei. Parkplätze finden Sie direkt am Haus.",
                     "kontakt-kopf", "Das Gebäude des Zahnzentrums Messerschmidt in Mainz-Laubenheim")
     s += f'''
 <section class="wrap abschnitt">
+  <h2 class="sr-only">Kontaktdaten und Sprechzeiten</h2>
   <div class="kontakt-kacheln">
     <div class="kachel">{icon("telefon")}<h3>Telefon und E-Mail</h3><p><a class="gross-link" href="{TEL_LINK}">{TEL}</a><br>Fax 06131 86936<br><a href="mailto:{MAIL}">{MAIL}</a></p></div>
     <div class="kachel">{icon("uhr")}<h3>Sprechzeiten</h3><p>Montag bis Donnerstag<br>8:00 bis 20:00 Uhr durchgehend</p><p>Freitag<br>8:00 bis 16:00 Uhr</p><p class="klein">Termine nach Vereinbarung</p></div>
@@ -577,7 +670,7 @@ def kontakt():
 
 # ---------------------------------------------------------------- Rechtliches
 def rechtliches():
-    s = kopf("Impressum | Zahnzentrum Messerschmidt", "Impressum des Zahnzentrums Messerschmidt in Mainz-Laubenheim: Anbieter, Kontakt, berufsrechtliche Angaben.", "impressum.html")
+    s = kopf("Impressum | Zahnzentrum Messerschmidt", "Impressum des Zahnzentrums Messerschmidt in Mainz-Laubenheim: Anbieter, Kontaktdaten, zuständige Kammer und berufsrechtliche Angaben der Zahnärztin.", "impressum.html")
     s += f'''
 <!-- Angaben aus dem Impressum der bisherigen Hauptseite (06.10.2026). Von der Kundin prüfen lassen, besonders die „Umsatzsteueridentifikationsnummer“ (Format einer Steuernummer). -->
 <section class="wrap abschnitt rechtstext">
@@ -636,12 +729,51 @@ def rechtliches():
     s += fuss()
     schreibe("datenschutz.html", s)
 
+def fehlerseite():
+    s = kopf("Seite nicht gefunden | Zahnzentrum Messerschmidt", "Diese Seite gibt es nicht mehr. Hier finden Sie unsere Leistungen, Sprechzeiten und den Kontakt zum Zahnzentrum Messerschmidt.", "404.html", praefix="/")
+    s = s.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, follow">')
+    s += f'''
+<section class="seitenkopf"><div class="wrap seitenkopf-text">
+  <p class="dachzeile dachzeile-hell">Fehler 404</p>
+  <h1>Diese Seite gibt es nicht mehr.</h1>
+  <p class="lead">Vielleicht hat sich die Adresse mit unserer neuen Webseite geändert. Hier geht es weiter:</p>
+  <div class="knoepfe" style="margin-top:28px"><a class="knopf" href="/">Zur Startseite</a><a class="knopf knopf-rand-hell" href="/leistungen.html">Leistungen</a><a class="knopf knopf-rand-hell" href="/kontakt.html">Kontakt</a></div>
+</div></section>'''
+    s += fuss(praefix="/")
+    schreibe("404.html", s)
+
+def llms():
+    z = [f"# {FIRMA}", "", "> Zahnarztpraxis in Mainz-Laubenheim (Parkstraße 33, 55130 Mainz) mit eigenem Dentallabor. Praxisinhaberin: Dr. med. Sabine Messerschmidt.", "",
+         "## Fakten", f"- Adresse: Parkstraße 33, 55130 Mainz-Laubenheim (Einfahrt Hans-Zöller-Straße 114, Parkplätze am Haus)",
+         f"- Telefon: {TEL}, E-Mail: {MAIL}", "- Sprechzeiten: Montag bis Donnerstag 8 bis 20 Uhr, Freitag 8 bis 16 Uhr",
+         "- Zahnärztlicher Notdienst: 06131 6246-999", "- Praxis gegründet 1995, Zahnzentrum seit 2009",
+         "- Zahnärztinnen: " + "; ".join(f'{x["name"]} ({", ".join(x["schwerpunkte"][:2])})' for x in ZAHNAERZTINNEN), "",
+         "## Leistungen"] + [f'- [{l["titel"]}]({DOMAIN}/leistungen/{l["slug"]}.html): {l["kurz_erklaert"]}' for l in LEISTUNGEN] + ["",
+         "## Seiten", f"- [Praxis]({DOMAIN}/praxis.html)", f"- [Team]({DOMAIN}/team.html)", f"- [Patienteninfos]({DOMAIN}/patienteninfos.html)",
+         f"- [Kontakt und Anfahrt]({DOMAIN}/kontakt.html)", f"- [Karriere]({KARRIERE})", ""]
+    (WEB / "llms.txt").write_text("\n".join(z), encoding="utf-8")
+
 def sitemap():
-    seiten = ["", "leistungen.html", "praxis.html", "team.html", "patienteninfos.html", "kontakt.html", "impressum.html", "datenschutz.html"] + [f'leistungen/{l["slug"]}.html' for l in LEISTUNGEN]
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'] + [f"  <url><loc>{DOMAIN}/{p}</loc></url>" for p in seiten] + ["</urlset>", ""]
+    seiten = [("", "1.0"), ("leistungen.html", "0.9")] + [(f'leistungen/{l["slug"]}.html', "0.8") for l in LEISTUNGEN] + \
+             [("praxis.html", "0.7"), ("team.html", "0.7"), ("patienteninfos.html", "0.6"), ("kontakt.html", "0.8"), ("impressum.html", "0.2"), ("datenschutz.html", "0.2")]
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'] + \
+         [f"  <url><loc>{DOMAIN}/{p}</loc><lastmod>{HEUTE}</lastmod><priority>{pr}</priority></url>" for p, pr in seiten] + ["</urlset>", ""]
     (WEB / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
-    (WEB / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8")
+    (WEB / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /anfrage-senden.php\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8")
+
+def pruefe_seo():
+    """Titel- und Beschreibungslängen, doppelte Titel. Gibt Warnungen aus, bricht nicht ab."""
+    import re as r
+    gesehen = {}
+    for f in sorted(WEB.rglob("*.html")):
+        t = f.read_text(encoding="utf-8")
+        ti = html.unescape(r.search(r"<title>(.*?)</title>", t).group(1)); de = html.unescape(r.search(r'name="description" content="(.*?)"', t).group(1))
+        rel = f.relative_to(WEB).as_posix()
+        if len(ti) > 62: print(f"WARNUNG Titel zu lang ({len(ti)}): {rel}: {ti}")
+        if not 110 <= len(de) <= 165: print(f"WARNUNG Beschreibung {len(de)} Zeichen: {rel}")
+        if ti in gesehen: print(f"WARNUNG doppelter Titel: {rel} und {gesehen[ti]}")
+        gesehen[ti] = rel
 
 if __name__ == "__main__":
-    startseite(); leistungen(); praxis(); team(); patienteninfos(); kontakt(); rechtliches(); sitemap()
+    startseite(); leistungen(); praxis(); team(); patienteninfos(); kontakt(); rechtliches(); fehlerseite(); llms(); sitemap(); pruefe_seo()
     print("Gebaut:", len(list(WEB.rglob("*.html"))), "Seiten")

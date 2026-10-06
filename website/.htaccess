@@ -11,24 +11,32 @@ RewriteEngine On
 RewriteCond %{HTTP_HOST} \.kasserver\.com$ [NC]
 RewriteRule ^ - [L]
 
-# --- Immer https und immer www -------------------------------------------
-# ERST AM LIVEGANG-TAG freischalten (Raute entfernen) und DOMAIN ersetzen.
-# Vorher nicht: eine falsche Umleitung macht die Seite unerreichbar.
+# --- Immer https, ohne www (die bisherige Seite lief ohne www, so bleibt Google-Ranking erhalten) ---
+# ERST AM LIVEGANG-TAG freischalten (Rauten entfernen). Vorher nicht.
 # RewriteCond %{HTTPS} !=on [OR]
-# RewriteCond %{HTTP_HOST} !^www\. [NC]
-# RewriteRule ^(.*)$ https://www.DOMAIN/$1 [R=301,L]
+# RewriteCond %{HTTP_HOST} ^www\. [NC]
+# RewriteRule ^(.*)$ https://zahnzentrum-messerschmidt.de/$1 [R=301,L]
 
-# --- Alte Adressen der Vorgaengerseite -------------------------------------
-# Am Livegang-Tag: die alte Seite auslesen, jede alte Adresse hierher.
-# So bleiben Google-Treffer und Lesezeichen gueltig.
-# Achtung: Heisst eine alte Seite genauso wie unser Versand-Skript
-# (z. B. /kontakt.php), zuerst das Skript umbenennen.
-#
-# Redirect 301 /index.php        /
-# Redirect 301 /ueber-uns.php    /ueber-uns.html
-# Redirect 301 /kontakt.php      /#kontakt
+# --- Alte Adressen der bisherigen WordPress-Seite (ausgelesen 06.10.2026) ---
+# Jede alte Adresse zeigt dauerhaft (301) auf die passende neue Seite. Greift erst auf dem echten Server.
+RedirectMatch 301 ^/uber-uns(/.*)?$                         /team.html
+RedirectMatch 301 ^/miller-zahnaerztin-in-mainz-laubenheim/?$ /team.html#miller
+RedirectMatch 301 ^/zahnaerztin-mainz-laubenheim/?$          /team.html#blatt
+RedirectMatch 301 ^/praxis/.+$                              /praxis.html
+RedirectMatch 301 ^/praxis/?$                               /praxis.html
+RedirectMatch 301 ^/leistungen/?$                           /leistungen.html
+RedirectMatch 301 ^/leistungen/([a-z-]+)/?$                 /leistungen/$1.html
+RedirectMatch 301 ^/wp/qualifiziert/([a-z-]+)/?$            /leistungen/$1.html
+RedirectMatch 301 ^/service/patienteninfos/?$               /patienteninfos.html
+RedirectMatch 301 ^/service/patenschaft-fuer-kindergaerten/?$ /leistungen/junge-zaehne.html
+RedirectMatch 301 ^/service(/.*)?$                          /praxis.html
+RedirectMatch 301 ^/neues-aus-der-praxis/?$                 /
+RedirectMatch 301 ^/(kontakt|anfahrt)/?$                    /kontakt.html
+RedirectMatch 301 ^/impressum/?$                            /impressum.html
+RedirectMatch 301 ^/datenschutz/?$                          /datenschutz.html
+RedirectMatch 301 ^/app/uploads/.*$                         /
 
-ErrorDocument 404 /index.html
+ErrorDocument 404 /404.html
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
@@ -45,6 +53,9 @@ ErrorDocument 404 /index.html
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType text/css "access plus 1 day"
   ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType video/mp4 "access plus 1 year"
+  ExpiresByType video/webm "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
