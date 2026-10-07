@@ -510,3 +510,8 @@ button.knopf{font-family:inherit;border:0;cursor:pointer}
 
 /* Echtes Hero-Video (seit 07.10.2026): kein zusätzlicher Zoom, die Kamera bewegt sich selbst */
 .hero-video{animation:none !important}
+
+/* Hero und Seitenköpfe breiter als der Inhalt (1700 statt 1500 px, Wunsch Awan 07.10.2026).
+   Kopfzeile und Brotkrumen ziehen mit, damit Logo und Hero-Text links auf einer Linie stehen. */
+:root{--breite-hero:1700px}
+.hero-inhalt.wrap,.seitenkopf-text.wrap,.kopf-zeile.wrap,.brotkrumen.wrap{max-width:var(--breite-hero)}
