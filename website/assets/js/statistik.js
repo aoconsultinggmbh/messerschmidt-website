@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   var adresse = 'https://statistik.ao-consult.de/';
-  var seite = '';
+  var seite = '14';
   if (!seite || /vorschau\.ao-consult\.de$|localhost|github\.io$/.test(location.hostname)) return;
   var _paq = (window._paq = window._paq || []);
   _paq.push(['disableCookies']); _paq.push(['setDoNotTrack', true]);
