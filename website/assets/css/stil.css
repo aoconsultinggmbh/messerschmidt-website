@@ -507,3 +507,6 @@ button.knopf{font-family:inherit;border:0;cursor:pointer}
 
 /* Zähler in der Fakten-Leiste: Zahl so groß und weiß wie der Rest der Zeile */
 .fakten-raster strong span{font-size:inherit;color:inherit}
+
+/* Echtes Hero-Video (seit 07.10.2026): kein zusätzlicher Zoom, die Kamera bewegt sich selbst */
+.hero-video{animation:none !important}

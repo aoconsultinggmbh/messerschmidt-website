@@ -11,9 +11,11 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 
 ## Hero-Video
 
-- `website/assets/video/hero.webm` (VP9, ca. 2 MB, wird zuerst geladen) und `hero.mp4` (H.264 für Safari, 1600×900, 25 s, ohne Ton, ca. 3 MB) ist **aus Shooting-Fotos erzeugt** (langsamer Zoom und Überblendung,
-  ffmpeg, Skript `film.sh` im Mac-Arbeitsordner): Bilder 29, 24, 9, 44, 36, 17. Sobald Iwan echte Bewegtaufnahmen liefert, Datei austauschen
-  (gleicher Name, H.264, ohne Ton, möglichst unter 5 MB, `-movflags +faststart`). Poster `hero-poster.jpg` = erstes Bild.
+- Seit 07.10.2026 echtes Video der AO Consulting (Original `AO_ZahnzentrumMesserschmidt_V01.mp4`, 1920×1080, 100 Bilder/s, 20 s, 158 MB,
+  liegt im Kundenordner auf dem Mac). Für die Seite umgerechnet mit ffmpeg: H.264, 30 Bilder/s, ohne Ton, `-movflags +faststart`:
+  `hero.mp4` 1920×1080 (ca. 4,6 MB, Rechner) und `hero-mobil.mp4` 1280×720 (ca. 2,3 MB, bis 760 px Breite, über `media` am `<source>`).
+  Poster `hero-poster.jpg` = erstes Bild (Luftaufnahme). WebM bewusst weggelassen: VP9 war bei gleicher Qualität größer als H.264,
+  und alle Browser spielen H.264. Der langsame Zusatz-Zoom ist für das echte Video abgeschaltet (die Kamera bewegt sich selbst).
 - Bei „Bewegung reduzieren“ im Betriebssystem läuft das Video nicht automatisch. Anhalten-Knopf unten rechts.
 
 ## Bilder
