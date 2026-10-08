@@ -28,7 +28,7 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 | start-karriere | 112 | Start, Karriere |
 | start-kontakt | 1 | Kontakt, Anfahrt |
 | praxis-kopf / -gebaeude / -wartebereich / -empfang | 10 / 4 / 52 / 31 | Praxis (Kopf und Wartebereich getauscht am 08.10.2026, Wunsch Awan) |
-| team-kopf / team-sabine / team-duo | 17 / 57 / 105 | Team (team-kopf seit 08.10.2026 Nr. 17 statt Nr. 28, Gruppe mit neun Personen war auf 27 Zoll zu eng angeschnitten) |
+| team-kopf / team-sabine / team-gruppe | 23 / 57 / 28 | Team (08.10.2026, Wunsch Awan: Kopfbild Abklatschen Nr. 23, Block „Anmeldung, Prophylaxe und Assistenz“ jetzt Gruppenfoto Nr. 28 statt team-duo Nr. 105) |
 | team-olga-miller / team-alina-guenther | 91 / 83 | Team, Zahnärztinnen (seit 08.10.2026, Zuordnung von Awan) |
 | team-lisa-blatt | nicht aus dem Shooting | Team, Bildschirmfoto des Porträts von der bisherigen Seite (von Awan geschickt, 08.10.2026) |
 | kontakt-kopf | 12 | Kontakt (vorher Nr. 2, getauscht am 08.10.2026, Wunsch Awan) |
