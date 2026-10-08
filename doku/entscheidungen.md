@@ -28,13 +28,14 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 | start-karriere | 112 | Start, Karriere |
 | start-kontakt | 1 | Kontakt, Anfahrt |
 | praxis-kopf / -gebaeude / -wartebereich / -empfang | 10 / 4 / 52 / 31 | Praxis (Kopf und Wartebereich getauscht am 08.10.2026, Wunsch Awan) |
-| team-kopf / team-sabine / team-duo | 28 / 57 / 105 | Team (team-kopf seit 08.10.2026 in voller Höhe, nach oben ausgerichtet, damit keine Köpfe abgeschnitten werden) |
+| team-kopf / team-sabine / team-duo | 17 / 57 / 105 | Team (team-kopf seit 08.10.2026 Nr. 17 statt Nr. 28, Gruppe mit neun Personen war auf 27 Zoll zu eng angeschnitten) |
+| team-lisa-blatt / team-alina-guenther | nicht aus dem Shooting | Team, Porträts von Awan am 08.10.2026 geschickt (Bildschirmfotos der Porträts von der bisherigen Seite), Zuordnung von Awan bestätigt |
 | kontakt-kopf | 12 | Kontakt (vorher Nr. 2, getauscht am 08.10.2026, Wunsch Awan) |
 | og-bild | 29 | Vorschaubild für Links |
 
 ## Offen / bitte bestätigen
 
-- [ ] **Fotos der Zahnärztinnen:** Olga Miller, Dr. Lisa Blatt und Dr. Alina Günther haben vorerst den Platzhalter „Foto wird nachgereicht“ (Vorgabe Awan).
+- [ ] **Foto Olga Miller:** hat noch den Platzhalter „Foto wird nachgereicht“. Lisa Blatt und Alina Günther haben seit 08.10.2026 Fotos. Olga Miller ist auf den Gruppenfotos Nr. 27 bis 30 die Zahnärztin mit Haube (Angabe Awan), ein Einzelporträt gibt es im Shooting nicht.
 - [ ] **Praxisteam-Raster (Team-Seite):** Portraits Nr. 71, 79, 91, 101 mit „Name wird nachgereicht / Funktion wird nachgereicht“. Falls darunter Zahnärztinnen sind, nach oben zu den Behandlerinnen verschieben.
 - [ ] **Team-Liste:** Die bisherige Seite nennt 14 Mitarbeiterinnen namentlich (Stand unklar). Mit Namen aufnehmen? Dann Liste bestätigen lassen.
 - [ ] **Hanh Geyrhofer** wird auf der alten Seite als Kinderzahnärztin/Endodontie genannt, steht aber nicht mehr bei den Zahnärztinnen. Bewusst weggelassen.
