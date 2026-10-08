@@ -323,8 +323,6 @@ p{margin:0 0 1.1em}
 .platzhalter-foto{aspect-ratio:4/5;border-radius:12px;border:2px dashed rgba(0,110,183,.35);background:repeating-linear-gradient(135deg,#fff 0 12px,#eef4f9 12px 24px);display:grid;place-items:center;text-align:center;color:var(--blau);font-weight:700;font-size:14px;line-height:1.35}
 .team-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 @media (max-width:1000px){.team-raster{grid-template-columns:1fr 1fr}}
-.team-raster.zwei{grid-template-columns:1fr 1fr;max-width:calc(50% - 10px)}
-@media (max-width:1000px){.team-raster.zwei{max-width:none}}
 .team-person{margin:0;border-radius:var(--radius);overflow:hidden;background:var(--flaeche)}
 .team-person img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .7s ease}
 .team-person:hover img{transform:scale(1.05)}
