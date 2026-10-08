@@ -36,7 +36,7 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 
 ## Offen / bitte bestätigen
 
-- [ ] **Team-Seite, zwei Mitarbeiterinnen ohne Namen:** Seit 08.10.2026 stehen Nr. 71 und 101 (team-person-1 und -4) unten bei „Ihre Behandlerinnen“ mit „Name wird nachgereicht / Funktion wird nachgereicht“ (Wunsch Awan). Der Abschnitt „Praxisteam“ mit dem Raster ist entfernt. Namen und Funktion fehlen noch. team-person-2/-3 sind ungenutzt (Nr. 79 und 91 jetzt als Alina Günther und Olga Miller).
+- [ ] **Team-Seite, zwei Mitarbeiterinnen ohne Namen:** Seit 08.10.2026 stehen Nr. 74 (team-mitarbeiterin-1, vorher Nr. 71) und 101 (team-person-4) unten bei „Ihre Behandlerinnen“ mit „Name wird nachgereicht / Funktion wird nachgereicht“ (Wunsch Awan). Der Abschnitt „Praxisteam“ mit dem Raster ist entfernt. Namen und Funktion fehlen noch. team-person-2/-3 sind ungenutzt (Nr. 79 und 91 jetzt als Alina Günther und Olga Miller).
 - [ ] **Team-Liste:** Die bisherige Seite nennt 14 Mitarbeiterinnen namentlich (Stand unklar). Mit Namen aufnehmen? Dann Liste bestätigen lassen.
 - [ ] **Hanh Geyrhofer** wird auf der alten Seite als Kinderzahnärztin/Endodontie genannt, steht aber nicht mehr bei den Zahnärztinnen. Bewusst weggelassen.
 - [ ] **Homöopathie** von der alten Seite nicht übernommen (Heilmittelwerberecht); Akupunktur bleibt als begleitendes Angebot.
