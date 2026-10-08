@@ -23,12 +23,12 @@ Stand 06.10.2026, Awan Tofik mit Claude. Kein eigenes Onboarding für die Haupts
 | Datei | Nr. | Seite |
 |---|---|---|
 | start-sabine | 62 | Start, Willkommen |
-| start-haus | 8 | Start, Praxis-Band |
+| start-haus | 9 | Start, Praxis-Band (vorher Nr. 8, getauscht am 08.10.2026: Dach war auf breiten Bildschirmen abgeschnitten) |
 | start-angst | 33 | Start, Angstpatienten |
 | start-karriere | 112 | Start, Karriere |
 | start-kontakt | 1 | Kontakt, Anfahrt |
 | praxis-kopf / -gebaeude / -wartebereich / -empfang | 10 / 4 / 52 / 31 | Praxis (Kopf und Wartebereich getauscht am 08.10.2026, Wunsch Awan) |
-| team-kopf / team-sabine / team-duo | 28 / 57 / 105 | Team |
+| team-kopf / team-sabine / team-duo | 28 / 57 / 105 | Team (team-kopf seit 08.10.2026 in voller Höhe, nach oben ausgerichtet, damit keine Köpfe abgeschnitten werden) |
 | kontakt-kopf | 12 | Kontakt (vorher Nr. 2, getauscht am 08.10.2026, Wunsch Awan) |
 | og-bild | 29 | Vorschaubild für Links |
 
